@@ -411,6 +411,10 @@ PrefabInstance:
       propertyPath: m_LocalPosition.x
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4351453426724769647, guid: 2b6e2ffdef4deae4bb1edf5846f98483, type: 3}
+      propertyPath: m_IsTrigger
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 4596834009302340131, guid: 2b6e2ffdef4deae4bb1edf5846f98483, type: 3}
       propertyPath: m_LocalScale.x
       value: 28
@@ -453,11 +457,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7509011761757333856, guid: 2b6e2ffdef4deae4bb1edf5846f98483, type: 3}
       propertyPath: spawnDelay
-      value: 0.5
+      value: 0.33333334
       objectReference: {fileID: 0}
     - target: {fileID: 7509011761757333856, guid: 2b6e2ffdef4deae4bb1edf5846f98483, type: 3}
       propertyPath: maxNumberOfPedestrians
-      value: 20
+      value: 30
       objectReference: {fileID: 0}
     - target: {fileID: 8550035007501039320, guid: 2b6e2ffdef4deae4bb1edf5846f98483, type: 3}
       propertyPath: m_RootOrder

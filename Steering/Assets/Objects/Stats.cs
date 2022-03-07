@@ -22,6 +22,7 @@ public class Stats : MonoBehaviour
     public void Increment()
     {
         Debug.Log(++counter + " Collisions.");
+        //Time.timeScale = 0.0f;
     }
 
     public void WallIncrement()

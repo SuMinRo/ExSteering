@@ -7,8 +7,10 @@ public class CollisionCounter : MonoBehaviour
     [SerializeField]
     GameObject parent;
     Stats stats;
-    CapsuleCollider collide;
+    CapsuleCollider ownCollide;
     float startTime;
+    [SerializeField]
+    float graceTime;
     Spawners spawners;
 
     // Start is called before the first frame update
@@ -17,21 +19,23 @@ public class CollisionCounter : MonoBehaviour
         GameObject statsObject = GameObject.Find("Stats");
         spawners = GameObject.Find("Spawners").GetComponent<Spawners>();
         stats = statsObject.GetComponent<Stats>();
-        collide = GetComponent<CapsuleCollider>();
-        collide.enabled = false;
+        ownCollide = GetComponent<CapsuleCollider>();
         startTime = Time.time;
     }
 
     void Update()
     {
-        if(collide.enabled = false && Time.time > startTime + 1 )
-            collide.enabled = true;
+        //Debug.Log(startTime);
     }
 
     void OnTriggerEnter(Collider collide)
     {
-        if (collide.gameObject.tag == "Pedestrian" && collide.gameObject != parent && StringLessThan(parent.name, collide.gameObject.name))
+        if (collide.gameObject.tag == "Pedestrian" && collide.gameObject != parent && Time.time > startTime + graceTime && Time.time > collide.GetComponent<Pedestrian>().startTime + graceTime && StringLessThan(parent.name, collide.gameObject.name))
+        {
             stats.Increment();
+            //Debug.Log("Me: " + startTime + "\nHim: " + collide.GetComponent<Pedestrian>().startTime + "\nTime: " + Time.time);
+            Debug.DrawLine(parent.transform.position, parent.transform.position + new Vector3(0, 10, 0), Color.red, 0.0f, true);
+        }
         else if (collide.gameObject.tag == "Obstacle")
         {
             stats.WallIncrement();

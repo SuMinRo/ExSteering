@@ -31,7 +31,7 @@ public class CloseDetector : MonoBehaviour
             }
 
             Vector3 colliderVector = collide.transform.position - pedestrian.transform.position;
-            if (Vector3.Dot(Vector3.Normalize(colliderVector), pedestrian.transform.forward) > Mathf.Cos(Mathf.PI/12) && Vector3.Dot(collide.transform.forward, parent.transform.forward) > 0 && (closestColliderVector.magnitude > colliderVector.magnitude || closestColliderVector == Vector3.zero))
+            if (Vector3.Dot(Vector3.Normalize(colliderVector), pedestrian.transform.forward) > Mathf.Cos(Mathf.PI/3) && Vector3.Dot(collide.transform.forward, parent.transform.forward) > 0 && (closestColliderVector.magnitude > colliderVector.magnitude || closestColliderVector == Vector3.zero))
                 closestColliderVector = colliderVector;
         }
         //Debug.Log(closestColliderVector);

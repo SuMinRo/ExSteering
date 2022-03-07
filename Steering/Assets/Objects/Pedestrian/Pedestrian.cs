@@ -23,6 +23,9 @@ public class Pedestrian : MonoBehaviour
     public Vector3 closeVector;
     Vector3 newDir;
 
+    [HideInInspector]
+    public float startTime;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -31,6 +34,7 @@ public class Pedestrian : MonoBehaviour
         maxSpeed = mSpeed;
 
         frontVector = Vector3.zero;
+        startTime = Time.time;
     }
 
     public void SetTargetAndSource(Cardinal spawner, Cardinal goal) 
