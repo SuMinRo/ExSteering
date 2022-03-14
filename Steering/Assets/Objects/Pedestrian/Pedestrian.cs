@@ -8,10 +8,14 @@ public class Pedestrian : MonoBehaviour
     [HideInInspector]
     public Cardinal target;
     public Strategy strat;
+    public SteeringAlgorithm method;
     [SerializeField]
     float mSpeed;
     float maxSpeed;
     VectorField vectorField;
+    RaycastObject[] hits;
+    [SerializeField]
+    int raycastFidelity;
 
     [HideInInspector]
     public Vector3 frontVector;
@@ -29,8 +33,23 @@ public class Pedestrian : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        GameObject plane = GameObject.Find("VectorField");
-        vectorField = plane.GetComponent<VectorField>();
+        if(method == SteeringAlgorithm.DevRules)
+        {
+            GameObject plane = GameObject.Find("VectorField");
+            vectorField = plane.GetComponent<VectorField>();
+        }
+        else
+        {
+            hits = new RaycastObject[raycastFidelity + 1];
+            for(int i = 0; i <= raycastFidelity; i++)
+            {
+                hits[i] = new RaycastObject(i - raycastFidelity / 2);
+            }
+            gameObject.transform.Find("FrontDetector").gameObject.SetActive(false);
+            gameObject.transform.Find("SideDetector").gameObject.SetActive(false);
+            gameObject.transform.Find("CloseDetector").gameObject.SetActive(false);
+        }
+        
         maxSpeed = mSpeed;
 
         frontVector = Vector3.zero;
@@ -41,6 +60,13 @@ public class Pedestrian : MonoBehaviour
     {
         source = spawner;
         target = goal;
+    }
+
+
+    // For Gradient-use only.
+    public Vector3 GetVelocity()
+    {
+        return transform.forward * mSpeed;
     }
 
     // Update is called once per frame
@@ -58,7 +84,7 @@ public class Pedestrian : MonoBehaviour
             transform.Rotate(new Vector3(0, -20, 0) * Time.deltaTime * mSpeed, Space.World);
         }
         //Autonomous behaviour
-        else
+        else if (method == SteeringAlgorithm.DevRules)
         {
             if(frontVector.magnitude != 0.0f)
             {
@@ -80,6 +106,24 @@ public class Pedestrian : MonoBehaviour
 
             transform.rotation = Quaternion.LookRotation(newDir);
         }
+        else
+        {
+            int layerMask = 1 << 0;
+            foreach(RaycastObject hit in hits)
+            {
+                if (Physics.Raycast(transform.position, transform.TransformDirection(hit.dir * Vector3.forward), out hit.hit, 12, layerMask))
+                {
+                    Debug.DrawRay(transform.position, transform.TransformDirection(hit.dir * Vector3.forward) * hit.hit.distance, Color.red);
+                    hit.UpdateObj(transform.position);
+                    //Debug.Log("Hit " + hit.hit.collider.gameObject);
+                }
+                else
+                {
+                    Debug.DrawRay(transform.position, transform.TransformDirection(hit.dir * Vector3.forward) * 12, Color.green);
+                    //Debug.Log("Did not Hit");
+                }
+            }
+        }
         transform.position += transform.forward * Time.deltaTime * maxSpeed;
 
         if(Input.GetKeyDown(KeyCode.UpArrow))
@@ -99,4 +143,49 @@ public enum Strategy
     Blend,
     BlendWeights,
     None
+}
+
+public enum SteeringAlgorithm
+{
+    DevRules,
+    Gradient
+}
+
+// For Gradient-use only.
+class RaycastObject
+{
+    public Quaternion dir;
+    Vector3 pos;
+    Vector3 vel;
+    public GameObject obj;
+    public RaycastHit hit;
+
+    float ttca;
+    float dca;
+
+    public RaycastObject(int angle)
+    {
+        dir = Quaternion.Euler(0, angle, 0);
+    }
+
+    public void UpdateObj(Vector3 ownPos)
+    { 
+        obj = hit.collider.gameObject;
+        pos = hit.point - ownPos;
+        Pedestrian objScript = obj.GetComponent<Pedestrian>();
+        if (objScript != null)
+        {
+            vel = objScript.GetVelocity();
+            ttca = -Vector3.Dot(pos, vel) / Mathf.Pow(vel.magnitude, 2);
+        }    
+        else
+        {
+            vel = Vector3.zero;
+            ttca = 0.0f;
+        }
+
+        dca = (pos + ttca * vel).magnitude;
+            
+        Debug.Log(ttca + "\n" + dca);
+    }
 }

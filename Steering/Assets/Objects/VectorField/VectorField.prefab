@@ -174,7 +174,7 @@ GameObject:
   - component: {fileID: 3074456791691979188}
   - component: {fileID: 631512210496839722}
   - component: {fileID: 822459591207798390}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: EastSpawner
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -246,7 +246,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3998260756138502705}
   - component: {fileID: 7509011761757333856}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Spawners
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -384,7 +384,7 @@ GameObject:
   - component: {fileID: 6486395556244876426}
   - component: {fileID: 8853832678265216788}
   - component: {fileID: 7615422312654790537}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: SouthSpawner
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1055,7 +1055,7 @@ GameObject:
   - component: {fileID: 7364799496403321905}
   - component: {fileID: 7429249892118559167}
   - component: {fileID: 342482243339723553}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: NorthSpawner
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1779,7 +1779,7 @@ GameObject:
   - component: {fileID: 5905004980050174183}
   - component: {fileID: 1057571605669200859}
   - component: {fileID: 6430456736421523365}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: WestSpawner
   m_TagString: Untagged
   m_Icon: {fileID: 0}

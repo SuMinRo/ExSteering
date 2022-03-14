@@ -461,7 +461,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7509011761757333856, guid: 2b6e2ffdef4deae4bb1edf5846f98483, type: 3}
       propertyPath: maxNumberOfPedestrians
-      value: 30
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 8550035007501039320, guid: 2b6e2ffdef4deae4bb1edf5846f98483, type: 3}
       propertyPath: m_RootOrder
