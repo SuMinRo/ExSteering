@@ -9,10 +9,12 @@ public class Pedestrian : MonoBehaviour
     public Cardinal target;
     public Strategy strat;
     public SteeringAlgorithm method;
-    [SerializeField]
-    float mSpeed;
-    float maxSpeed;
+    
+    public float mSpeed;
+    [HideInInspector]
+    public float maxSpeed;
     VectorField vectorField;
+
     RaycastObject[] hits;
     [SerializeField]
     int raycastFidelity;
@@ -43,7 +45,7 @@ public class Pedestrian : MonoBehaviour
             hits = new RaycastObject[raycastFidelity + 1];
             for(int i = 0; i <= raycastFidelity; i++)
             {
-                hits[i] = new RaycastObject(i - raycastFidelity / 2);
+                hits[i] = new RaycastObject(this, i - raycastFidelity / 2);
             }
             gameObject.transform.Find("FrontDetector").gameObject.SetActive(false);
             gameObject.transform.Find("SideDetector").gameObject.SetActive(false);
@@ -114,14 +116,17 @@ public class Pedestrian : MonoBehaviour
                 if (Physics.Raycast(transform.position, transform.TransformDirection(hit.dir * Vector3.forward), out hit.hit, 12, layerMask))
                 {
                     Debug.DrawRay(transform.position, transform.TransformDirection(hit.dir * Vector3.forward) * hit.hit.distance, Color.red);
-                    hit.UpdateObj(transform.position);
+                    hit.Perception(transform.position);
                     //Debug.Log("Hit " + hit.hit.collider.gameObject);
                 }
                 else
                 {
                     Debug.DrawRay(transform.position, transform.TransformDirection(hit.dir * Vector3.forward) * 12, Color.green);
+                    hit.Perception(Vector3.zero);
                     //Debug.Log("Did not Hit");
                 }
+                hit.Evaluation(transform.position, transform.forward);
+                hit.Action();
             }
         }
         transform.position += transform.forward * Time.deltaTime * maxSpeed;
@@ -154,6 +159,9 @@ public enum SteeringAlgorithm
 // For Gradient-use only.
 class RaycastObject
 {
+    Pedestrian agent;
+    Collider target;
+
     public Quaternion dir;
     Vector3 pos;
     Vector3 vel;
@@ -163,29 +171,77 @@ class RaycastObject
     float ttca;
     float dca;
 
-    public RaycastObject(int angle)
+    float cost;
+
+    public RaycastObject(Pedestrian ped, int angle)
     {
+        agent = ped;
+        target = GameObject.Find(agent.target.ToString() + "Spawner").GetComponent<Collider>(); ;
+
         dir = Quaternion.Euler(0, angle, 0);
+        ttca = float.MaxValue;
+        dca = float.MaxValue;
+        cost = float.MaxValue;
     }
 
-    public void UpdateObj(Vector3 ownPos)
-    { 
-        obj = hit.collider.gameObject;
-        pos = hit.point - ownPos;
-        Pedestrian objScript = obj.GetComponent<Pedestrian>();
-        if (objScript != null)
+    public void Perception(Vector3 ownPos)
+    {
+        if (ownPos != Vector3.zero)
         {
-            vel = objScript.GetVelocity();
-            ttca = -Vector3.Dot(pos, vel) / Mathf.Pow(vel.magnitude, 2);
-        }    
+            obj = hit.collider.gameObject;
+            pos = hit.point - ownPos;
+            Pedestrian objScript = obj.GetComponent<Pedestrian>();
+            if (objScript != null)
+            {
+                vel = objScript.GetVelocity();
+                ttca = -Vector3.Dot(pos, vel) / Mathf.Pow(vel.magnitude, 2);
+            }
+            else
+            {
+                vel = Vector3.zero;
+                ttca = 0.0f;
+            }
+
+            dca = (pos + ttca * vel).magnitude;
+
+            //Debug.Log(ttca + "\n" + dca);
+        }
         else
         {
-            vel = Vector3.zero;
-            ttca = 0.0f;
+            obj = null;
+            pos = ownPos;
+            ttca = float.MaxValue;
+            dca = float.MaxValue;
         }
+    }
 
-        dca = (pos + ttca * vel).magnitude;
-            
-        Debug.Log(ttca + "\n" + dca);
+    public void Evaluation(Vector3 ownPos, Vector3 ownForward)
+    {
+        cost = CostMovement(2.0f, 3.3f, ownPos, ownForward) + CostObstacles(1.8f, 0.3f);
+    }
+
+    float CostMovement(float alphaSigma, float speedSigma, Vector3 ownPos, Vector3 ownForward)
+    {
+        //Debug.DrawLine(ownPos, target.ClosestPointOnBounds(ownPos), Color.magenta);
+        
+        float alphaG = Mathf.Acos(Vector3.Dot(Vector3.Normalize(target.ClosestPointOnBounds(ownPos) - ownPos), ownForward)) + dir.eulerAngles[1] * Mathf.PI / 180;
+        if (alphaG > Mathf.PI)
+            alphaG -= 2 * Mathf.PI;
+
+        float alphaCost = Mathf.Exp(-0.5f * Mathf.Pow(alphaG / alphaSigma, 2));
+        //Debug.Log(alphaG);
+
+        float speedCost = Mathf.Exp(-0.5f * Mathf.Pow((agent.mSpeed - agent.maxSpeed) / speedSigma, 2));
+        return 1.0f - 0.5f * (alphaCost + speedCost);
+    }
+
+    float CostObstacles(float ttcaSigma, float dcaSigma)
+    {
+        return Mathf.Exp(-0.5f * (Mathf.Pow(ttca / ttcaSigma, 2) + Mathf.Pow(dca / dcaSigma, 2)));
+    }
+
+    public void Action()
+    {
+
     }
 }

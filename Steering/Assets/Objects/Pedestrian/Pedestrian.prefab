@@ -398,9 +398,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   target: 0
-  strat: 1
+  strat: 0
   method: 1
-  mSpeed: 3
+  mSpeed: 1.5
+  maxSpeed: 0
   raycastFidelity: 120
   frontVector: {x: 0, y: 0, z: 0}
   wallDetected: 0
