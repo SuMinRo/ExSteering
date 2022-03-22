@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Pedestrian : MonoBehaviour
 {
-    int numberOfDebug;
+    public int numberOfDebug;
 
     Cardinal source;
     [HideInInspector]
@@ -24,6 +24,7 @@ public class Pedestrian : MonoBehaviour
     [SerializeField]
     Vector4 sigmas;
     Collider spawnerTarget;
+    bool skip;
 
     [HideInInspector]
     public Vector3 frontVector;
@@ -41,7 +42,7 @@ public class Pedestrian : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        numberOfDebug = 2;
+        numberOfDebug = 1;
         if(method == SteeringAlgorithm.DevRules)
         {
             GameObject plane = GameObject.Find("VectorField");
@@ -116,7 +117,7 @@ public class Pedestrian : MonoBehaviour
 
             transform.rotation = Quaternion.LookRotation(newDir);
         }
-        else
+        else if (method == SteeringAlgorithm.Gradient)
         {
             int layerMask = 1 << 0;
             Vector2 partialDerivativesObstacles = new Vector2(0.0f, 0.0f);
@@ -125,7 +126,7 @@ public class Pedestrian : MonoBehaviour
             {
                 if (Physics.Raycast(transform.position, transform.TransformDirection(hit.dir * Vector3.forward), out hit.hit, 12, layerMask))
                 {
-                    Debug.DrawRay(transform.position, transform.TransformDirection(hit.dir * Vector3.forward) * hit.hit.distance, Color.red);
+                    //Debug.DrawRay(transform.position, transform.TransformDirection(hit.dir * Vector3.forward) * hit.hit.distance, Color.red);
                     hit.Perception();
                     amountOfHits++;
                     hit.Evaluation(sigmas[2], sigmas[3]);
@@ -133,17 +134,18 @@ public class Pedestrian : MonoBehaviour
                 }
                 else
                 {
-                    Debug.DrawRay(transform.position, transform.TransformDirection(hit.dir * Vector3.forward) * 12, Color.green);
+                    //Debug.DrawRay(transform.position, transform.TransformDirection(hit.dir * Vector3.forward) * 12, Color.green);
                 }
             }
             if(amountOfHits != 0)
                 partialDerivativesObstacles /= amountOfHits;
+            
             Vector2 partialDerivativesMovement = PartialDerivativeMovement(sigmas[0], sigmas[1]);
             Action(partialDerivativesMovement[0] + partialDerivativesObstacles[0], partialDerivativesMovement[1] + partialDerivativesObstacles[1]);
         }
         transform.position += transform.forward * Time.deltaTime * maxSpeed;
 
-        if(Input.GetKeyDown(KeyCode.UpArrow))
+        if (Input.GetKeyDown(KeyCode.UpArrow))
         {
             if (Time.timeScale == 0.0f)
                 Time.timeScale = 1.0f;
@@ -169,22 +171,22 @@ public class Pedestrian : MonoBehaviour
 
     Vector2 PartialDerivativeMovement(float alphaSigma, float speedSigma)
     {
-        float alphaG  = Mathf.Acos(Vector3.Dot(Vector3.Normalize(spawnerTarget.ClosestPointOnBounds(transform.position) - transform.position), transform.forward));
-        if (alphaG > Mathf.PI)
-            alphaG -= 2 * Mathf.PI;
+        Vector3 targetVector = spawnerTarget.ClosestPointOnBounds(transform.position) - transform.position;
+        float alphaG  = Mathf.Acos(Mathf.Clamp(Vector3.Dot(Vector3.Normalize(targetVector), transform.forward), -1.0f, 1.0f));
+        if (Vector3.Cross(transform.forward, targetVector).y > 0)
+            alphaG = -alphaG;
+        //Debug.DrawLine(transform.position, targetVector + transform.position, Color.magenta);
         float speed = ((mSpeed - maxSpeed) / (2 * speedSigma)) * Mathf.Exp(Mathf.Pow(-0.5f * (mSpeed - maxSpeed) / speedSigma, 2));
         float angle = (-alphaG / (2 * alphaSigma)) * Mathf.Exp(Mathf.Pow(-0.5f * alphaG / alphaSigma, 2));
-
         return new Vector2(speed, angle);
     }
 
     void Action(float newSpeed, float newAngle)
     { 
         mSpeed -= newSpeed;
-        //Vector3 gradualRotation = Vector3.RotateTowards(transform.forward, Quaternion.Euler(0, newAngle * 180.0f / Mathf.PI, 0) * transform.forward, -Time.deltaTime, 0.0f);
+        Vector3 gradualRotation = Vector3.RotateTowards(transform.forward, Quaternion.Euler(0, (newAngle + Random.Range(-0.1f, 0.1f)) * 180.0f / Mathf.PI, 0) * transform.forward, Time.deltaTime, 0.0f);
         Debug.DrawRay(transform.position, Quaternion.Euler(0, newAngle * 180.0f / Mathf.PI, 0) * transform.forward, Color.blue);
-        //transform.rotation = Quaternion.LookRotation(gradualRotation);
-        transform.Rotate(Vector3.up, newAngle * 180.0f / Mathf.PI);
+        transform.rotation = Quaternion.LookRotation(gradualRotation);
     }
 }
 
@@ -254,7 +256,7 @@ class RaycastObject
             ttca = -Vector3.Dot(pos, vel) / Mathf.Pow(vel.magnitude, 2);
         else
             ttca = 0.0f;
-        dca = (pos + ttca * vel).magnitude;
+        dca = (pos + ttca * vel).magnitude + Mathf.Epsilon;
     }
 
     public void Evaluation(float ttcaSigma, float dcaSigma)
@@ -274,8 +276,8 @@ class RaycastObject
 
     public Vector4 TtcaAndDcaPartialDerivatives()
     {
-        float ttcaSpeed = Vector3.Dot(pos + 2 * ttca * vel, agent.transform.forward) / Vector3.Dot(vel, vel);
-        float ttcaAngle = Vector3.Dot(pos + 2 * ttca * vel, new Vector3(agent.transform.forward.z, 0, -agent.transform.forward.x)) / Vector3.Dot(vel, vel);
+        float ttcaSpeed = Vector3.Dot(pos + 2 * ttca * vel, agent.transform.forward) / (Vector3.Dot(vel, vel)+Mathf.Epsilon);
+        float ttcaAngle = Vector3.Dot(pos + 2 * ttca * vel, new Vector3(agent.transform.forward.z, 0, -agent.transform.forward.x)) / (Vector3.Dot(vel, vel) + Mathf.Epsilon);
         float dcaSpeed = Vector3.Dot(pos + ttca * vel, ttcaSpeed * vel - ttca * agent.transform.forward) / dca;
         float dcaAngle = Vector3.Dot(pos + ttca * vel, ttcaSpeed * vel + ttca * new Vector3(agent.transform.forward.z, 0, -agent.transform.forward.x)) / dca;
         return new Vector4(ttcaSpeed, ttcaAngle, dcaSpeed, dcaAngle);

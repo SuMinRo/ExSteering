@@ -457,11 +457,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7509011761757333856, guid: 2b6e2ffdef4deae4bb1edf5846f98483, type: 3}
       propertyPath: spawnDelay
-      value: 0.33333334
+      value: 0.8
       objectReference: {fileID: 0}
     - target: {fileID: 7509011761757333856, guid: 2b6e2ffdef4deae4bb1edf5846f98483, type: 3}
       propertyPath: maxNumberOfPedestrians
-      value: 1
+      value: 25
       objectReference: {fileID: 0}
     - target: {fileID: 8550035007501039320, guid: 2b6e2ffdef4deae4bb1edf5846f98483, type: 3}
       propertyPath: m_RootOrder

@@ -397,12 +397,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 17a96dcd5f3496b439a92c87fc94e1ac, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  numberOfDebug: 0
   target: 0
   strat: 0
   method: 1
   mSpeed: 1.5
   maxSpeed: 0
-  raycastFidelity: 120
+  raycastFidelity: 160
   sigmas: {x: 2, y: 3.3, z: 1.8, w: 0.3}
   frontVector: {x: 0, y: 0, z: 0}
   wallDetected: 0
