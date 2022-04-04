@@ -111,9 +111,9 @@ public class Pedestrian : MonoBehaviour
             }
 
             if (closeVector.magnitude > 0.0f && maxSpeed > 0.0f)
-                maxSpeed -= 0.25f;
+                maxSpeed -= 0.125f;
             else if (maxSpeed < mSpeed)
-                maxSpeed += 0.25f;
+                maxSpeed += 0.125f;
 
             transform.rotation = Quaternion.LookRotation(newDir);
         }
@@ -141,6 +141,11 @@ public class Pedestrian : MonoBehaviour
                 partialDerivativesObstacles /= amountOfHits;
             
             Vector2 partialDerivativesMovement = PartialDerivativeMovement(sigmas[0], sigmas[1]);
+            if(float.IsNaN(partialDerivativesMovement[0] + partialDerivativesMovement[1] + partialDerivativesObstacles[0] + partialDerivativesObstacles[1]) || float.IsInfinity(partialDerivativesMovement[0] + partialDerivativesMovement[1] + partialDerivativesObstacles[0] + partialDerivativesObstacles[1]))
+            {
+                Debug.Log(partialDerivativesMovement + "\n" + partialDerivativesObstacles);
+            }
+            
             Action(partialDerivativesMovement[0] + partialDerivativesObstacles[0], partialDerivativesMovement[1] + partialDerivativesObstacles[1]);
         }
         transform.position += transform.forward * Time.deltaTime * maxSpeed;
@@ -184,7 +189,8 @@ public class Pedestrian : MonoBehaviour
     void Action(float newSpeed, float newAngle)
     { 
         mSpeed -= newSpeed;
-        Vector3 gradualRotation = Vector3.RotateTowards(transform.forward, Quaternion.Euler(0, (newAngle + Random.Range(-0.1f, 0.1f)) * 180.0f / Mathf.PI, 0) * transform.forward, Time.deltaTime, 0.0f);
+        if (mSpeed < 0.0f) mSpeed = 0;
+        Vector3 gradualRotation = Vector3.RotateTowards(transform.forward, Quaternion.Euler(0, (newAngle + Random.Range(-0.1f, 0.1f)) * 180.0f / Mathf.PI, 0) * transform.forward, mSpeed * Time.deltaTime, 0.0f);
         Debug.DrawRay(transform.position, Quaternion.Euler(0, newAngle * 180.0f / Mathf.PI, 0) * transform.forward, Color.blue);
         transform.rotation = Quaternion.LookRotation(gradualRotation);
     }
@@ -241,6 +247,7 @@ class RaycastObject
         
         obj = hit.collider.gameObject;
         pos = hit.point - agent.transform.position;
+        //pos = pos.normalized * (pos.magnitude - 0.5f);
         Pedestrian objScript = obj.GetComponent<Pedestrian>();
         if (objScript != null)
         {
@@ -267,19 +274,26 @@ class RaycastObject
     public Vector2 PartialDerivativeObstacles(float ttcaSigma, float dcaSigma)
     {
         Vector4 ttcaAndDcaPartialDerivatives = TtcaAndDcaPartialDerivatives();
-        float speed = -cost * (ttcaAndDcaPartialDerivatives[0] * (ttca / Mathf.Pow(ttcaSigma, 2))
-                                        + ttcaAndDcaPartialDerivatives[2] * (dca / Mathf.Pow(dcaSigma, 2)));
-        float angle = -cost * (ttcaAndDcaPartialDerivatives[1] * (ttca / Mathf.Pow(ttcaSigma, 2))
-                                        + ttcaAndDcaPartialDerivatives[3] * (dca / Mathf.Pow(dcaSigma, 2)));
+        //if(float.IsNaN(ttcaAndDcaPartialDerivatives[0] + ttcaAndDcaPartialDerivatives[1] + ttcaAndDcaPartialDerivatives[2] + ttcaAndDcaPartialDerivatives[3]) || float.IsInfinity(ttcaAndDcaPartialDerivatives[0] + ttcaAndDcaPartialDerivatives[1] + ttcaAndDcaPartialDerivatives[2] + ttcaAndDcaPartialDerivatives[3]))
+        //    Debug.Log(ttcaAndDcaPartialDerivatives + "\n" + vel + ", " + ttca + ", " + dca);
+        float speed = ClampMax(-cost * (ttcaAndDcaPartialDerivatives[0] * (ttca / Mathf.Pow(ttcaSigma, 2))
+                                        + ttcaAndDcaPartialDerivatives[2] * (dca / Mathf.Pow(dcaSigma, 2))));
+        float angle = ClampMax(-cost * (ttcaAndDcaPartialDerivatives[1] * (ttca / Mathf.Pow(ttcaSigma, 2))
+                                        + ttcaAndDcaPartialDerivatives[3] * (dca / Mathf.Pow(dcaSigma, 2))));
         return new Vector2(speed, angle);
     }
 
     public Vector4 TtcaAndDcaPartialDerivatives()
     {
-        float ttcaSpeed = Vector3.Dot(pos + 2 * ttca * vel, agent.transform.forward) / (Vector3.Dot(vel, vel)+Mathf.Epsilon);
-        float ttcaAngle = Vector3.Dot(pos + 2 * ttca * vel, new Vector3(agent.transform.forward.z, 0, -agent.transform.forward.x)) / (Vector3.Dot(vel, vel) + Mathf.Epsilon);
-        float dcaSpeed = Vector3.Dot(pos + ttca * vel, ttcaSpeed * vel - ttca * agent.transform.forward) / dca;
-        float dcaAngle = Vector3.Dot(pos + ttca * vel, ttcaSpeed * vel + ttca * new Vector3(agent.transform.forward.z, 0, -agent.transform.forward.x)) / dca;
+        float ttcaSpeed = ClampMax(Vector3.Dot(pos + 2 * ttca * vel, agent.transform.forward) / (Vector3.Dot(vel, vel)+Mathf.Epsilon));
+        float ttcaAngle = ClampMax(Vector3.Dot(pos + 2 * ttca * vel, new Vector3(agent.transform.forward.z, 0, -agent.transform.forward.x)) / (Vector3.Dot(vel, vel) + Mathf.Epsilon));
+        float dcaSpeed = ClampMax(Vector3.Dot(pos + ttca * vel, ttcaSpeed * vel - ttca * agent.transform.forward) / dca);
+        float dcaAngle = ClampMax(Vector3.Dot(pos + ttca * vel, ttcaSpeed * vel + ttca * new Vector3(agent.transform.forward.z, 0, -agent.transform.forward.x)) / dca);
         return new Vector4(ttcaSpeed, ttcaAngle, dcaSpeed, dcaAngle);
+    }
+
+    float ClampMax(float val)
+    {
+        return Mathf.Clamp(val, float.MinValue, float.MaxValue);
     }
 }
