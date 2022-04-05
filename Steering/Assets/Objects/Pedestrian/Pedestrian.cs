@@ -110,10 +110,10 @@ public class Pedestrian : MonoBehaviour
                 newDir = Vector3.RotateTowards(transform.forward, vectorField.Interpolate(transform.position, target), Time.deltaTime, 0.0f);
             }
 
-            if (closeVector.magnitude > 0.0f && maxSpeed > 0.0f)
-                maxSpeed -= 0.125f;
-            else if (maxSpeed < mSpeed)
-                maxSpeed += 0.125f;
+            if (closeVector.magnitude > 0.0f && mSpeed > 0.0f)
+                mSpeed -= 0.125f;
+            else if (mSpeed < maxSpeed)
+                mSpeed += 0.125f;
 
             transform.rotation = Quaternion.LookRotation(newDir);
         }
@@ -148,7 +148,7 @@ public class Pedestrian : MonoBehaviour
             
             Action(partialDerivativesMovement[0] + partialDerivativesObstacles[0], partialDerivativesMovement[1] + partialDerivativesObstacles[1]);
         }
-        transform.position += transform.forward * Time.deltaTime * maxSpeed;
+        transform.position += transform.forward * Time.deltaTime * mSpeed;
 
         if (Input.GetKeyDown(KeyCode.UpArrow))
         {
@@ -189,7 +189,7 @@ public class Pedestrian : MonoBehaviour
     void Action(float newSpeed, float newAngle)
     { 
         mSpeed -= newSpeed;
-        if (mSpeed < 0.0f) mSpeed = 0;
+        if (mSpeed < 0.0f) mSpeed = 0.0f;
         Vector3 gradualRotation = Vector3.RotateTowards(transform.forward, Quaternion.Euler(0, (newAngle + Random.Range(-0.1f, 0.1f)) * 180.0f / Mathf.PI, 0) * transform.forward, mSpeed * Time.deltaTime, 0.0f);
         Debug.DrawRay(transform.position, Quaternion.Euler(0, newAngle * 180.0f / Mathf.PI, 0) * transform.forward, Color.blue);
         transform.rotation = Quaternion.LookRotation(gradualRotation);

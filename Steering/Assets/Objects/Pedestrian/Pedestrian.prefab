@@ -403,8 +403,8 @@ MonoBehaviour:
   method: 1
   mSpeed: 1.5
   maxSpeed: 0
-  raycastFidelity: 180
-  sigmas: {x: 2, y: 10, z: 7.2, w: 0.8}
+  raycastFidelity: 150
+  sigmas: {x: 4, y: 3.3, z: 7.2, w: 0.6}
   frontVector: {x: 0, y: 0, z: 0}
   wallDetected: 0
   sideVector: {x: 0, y: 0, z: 0}
