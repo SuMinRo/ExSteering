@@ -67,6 +67,7 @@ public class FrontDetector : MonoBehaviour
                 if (Vector3.Dot(collide.transform.forward, pedestrian.transform.forward) < 0 && (closestColliderVector.magnitude > colliderVector.magnitude || closestColliderVector == Vector3.zero))
                 {
                     closestColliderVector = colliderVector;
+                    pedestrian.UpdateThreat(collide, true);
 
                     if (Mathf.Abs(Vector3.Dot(Vector3.Normalize(closestColliderVector), collide.transform.right)) > Mathf.Sin(15 * Mathf.PI / 180))
                         adjustedColliderVector = -collide.transform.forward;

@@ -35,6 +35,12 @@ public class Pedestrian : MonoBehaviour
     [HideInInspector]
     public Vector3 closeVector;
     Vector3 newDir;
+    float frontRng;
+    float sideRng;
+    [HideInInspector]
+    public Collider frontThreat;
+    [HideInInspector]
+    public Collider sideThreat;
 
     [HideInInspector]
     public float startTime;
@@ -47,6 +53,8 @@ public class Pedestrian : MonoBehaviour
         {
             GameObject plane = GameObject.Find("VectorField");
             vectorField = plane.GetComponent<VectorField>();
+            NewSeed(true);
+            NewSeed(false);
         }
         else
         {
@@ -99,11 +107,20 @@ public class Pedestrian : MonoBehaviour
         {
             if(frontVector.magnitude != 0.0f)
             {
-                newDir = Vector3.RotateTowards(transform.forward, frontVector, Time.deltaTime, 0.0f);
+                if(PeekAction(true, 1) == 1)
+                    newDir = Vector3.RotateTowards(transform.forward, frontVector, Time.deltaTime, 0.0f);
+                else
+                    newDir = Vector3.RotateTowards(transform.forward, vectorField.Interpolate(transform.position, target), Time.deltaTime, 0.0f);
             }
             else if(sideVector.magnitude != 0.0f)
             {
-                newDir = Vector3.RotateTowards(transform.forward, sideVector, Time.deltaTime, 0.0f);
+                int actionResponse = PeekAction(true, 0);
+                if (actionResponse == -1)
+                    newDir = Vector3.RotateTowards(transform.forward, sideVector, Time.deltaTime, 0.0f);
+                else if(actionResponse == 1)
+                    newDir = Vector3.RotateTowards(transform.forward, sideVector, -Time.deltaTime, 0.0f);
+                else
+                    newDir = Vector3.RotateTowards(transform.forward, vectorField.Interpolate(transform.position, target), Time.deltaTime, 0.0f);
             }
             else
             {
@@ -115,7 +132,8 @@ public class Pedestrian : MonoBehaviour
             else if (mSpeed < maxSpeed)
                 mSpeed += 0.125f;
 
-            transform.rotation = Quaternion.LookRotation(newDir);
+            if(newDir != Vector3.zero)
+                transform.rotation = Quaternion.LookRotation(newDir);
         }
         else if (method == SteeringAlgorithm.Gradient)
         {
@@ -156,6 +174,74 @@ public class Pedestrian : MonoBehaviour
                 Time.timeScale = 1.0f;
             else
                 Time.timeScale = 0.0f;
+        }
+
+        //Debug.Log(rng);
+    }
+
+    public void NewSeed(bool front)
+    {
+        if (front) frontRng = Random.Range(0.0f, 1.0f);
+        else sideRng = Random.Range(0.0f, 1.0f);
+    }
+
+    public void UpdateThreat(Collider coll, bool front)
+    {
+        if(front)
+        {
+            if (coll != frontThreat)
+            {
+                frontThreat = coll;
+                NewSeed(front);
+            }
+        }
+        else
+        {
+            if (coll != sideThreat)
+            {
+                sideThreat = coll;
+                NewSeed(front);
+            }
+        }
+        
+    }
+
+    //direction = -1, 0, 1. -1 same, 0 perp, 1 opp.
+    //Returns int depending on action. -1 towards (if applicable), 0 no action, 1 away.
+    public int PeekAction(bool sus, int direction)
+    {
+        if(sus)
+        {
+            if(direction == 1)
+            {
+                if (frontRng < 0.7524429967) return 1;
+                else return 0;
+            }
+            else // == 0
+            {
+                if (sideRng < 0.4986522911) return -1;
+                else if (sideRng < 0.7331536388) return 1;
+                else return 0;
+            }
+        }
+        else
+        {
+            if (direction == 1)
+            {
+                if (frontRng < 0.7525773196) return 1;
+                else return 0;
+            }
+            else if (direction == 0)
+            {
+                if (sideRng < 0.3689839572) return -1;
+                else if (sideRng < 0.679144385) return 1;
+                else return 0;
+            }
+            else // == -1
+            {
+                if (frontRng < 0.7252734398) return 1;
+                else return 0;
+            }
         }
     }
 

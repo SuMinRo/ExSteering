@@ -69,8 +69,9 @@ public class SideDetector : MonoBehaviour
 
             Vector3 colliderVector = collide.transform.position - pedestrian.transform.position;
             //Debug.Log(collide.gameObject.name +  ", Intersect: " + (SolveRayIntersect(collide) != 0.0f) + ", To the right: " + (Vector3.Dot(colliderVector, pedestrian.transform.right) > 0));
-            if (SolveRayIntersect(collide) != 0.0f && Vector3.Dot(colliderVector, pedestrian.transform.right) > 0 && (closestColliderVector.magnitude > colliderVector.magnitude || closestColliderVector == Vector3.zero))
+            if (SolveRayIntersect(collide) != 0.0f /*&& Vector3.Dot(colliderVector, pedestrian.transform.right) > 0*/ && (closestColliderVector.magnitude > colliderVector.magnitude || closestColliderVector == Vector3.zero))
             {
+                pedestrian.UpdateThreat(collide, false);
                 closestColliderVector = colliderVector;
                 adjustedColliderVector = -collide.transform.forward;
             }

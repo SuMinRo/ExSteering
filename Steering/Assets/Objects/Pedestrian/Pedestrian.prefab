@@ -400,7 +400,7 @@ MonoBehaviour:
   numberOfDebug: 0
   target: 0
   strat: 0
-  method: 1
+  method: 0
   mSpeed: 1.5
   maxSpeed: 0
   raycastFidelity: 150
