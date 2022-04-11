@@ -409,6 +409,10 @@ MonoBehaviour:
   wallDetected: 0
   sideVector: {x: 0, y: 0, z: 0}
   closeVector: {x: 0, y: 0, z: 0}
+  frontDetector: {fileID: 5113049316719337975}
+  sideDetector: {fileID: 7662272235471764081}
+  frontThreat: {fileID: 0}
+  sideThreat: {fileID: 0}
   startTime: 0
 --- !u!54 &698056019062443756
 Rigidbody:

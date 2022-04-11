@@ -44,7 +44,7 @@ public class CollisionCounter : MonoBehaviour
         }
     }
 
-    bool StringLessThan(string compare, string to)
+    public static bool StringLessThan(string compare, string to)
     {
         if (int.Parse(compare, System.Globalization.NumberStyles.HexNumber) < int.Parse(to, System.Globalization.NumberStyles.HexNumber))
             return true;

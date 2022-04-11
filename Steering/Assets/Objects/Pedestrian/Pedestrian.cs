@@ -37,6 +37,10 @@ public class Pedestrian : MonoBehaviour
     Vector3 newDir;
     float frontRng;
     float sideRng;
+    [SerializeField]
+    FrontDetector frontDetector;
+    [SerializeField]
+    SideDetector sideDetector;
     [HideInInspector]
     public Collider frontThreat;
     [HideInInspector]
@@ -55,6 +59,9 @@ public class Pedestrian : MonoBehaviour
             vectorField = plane.GetComponent<VectorField>();
             NewSeed(true);
             NewSeed(false);
+            frontThreat = null;
+            sideThreat = null;
+
         }
         else
         {
@@ -105,9 +112,18 @@ public class Pedestrian : MonoBehaviour
         //Autonomous behaviour
         else if (method == SteeringAlgorithm.DevRules)
         {
+            frontDetector.UpdatePriority();
+            sideDetector.UpdatePriority();
             if(frontVector.magnitude != 0.0f)
             {
-                if(PeekAction(true, 1) == 1)
+                int actionResponse = PeekAction(true, 1);
+                if (!wallDetected)
+                {
+                    GameObject threatObject = frontThreat.gameObject;
+                    if (CollisionCounter.StringLessThan(gameObject.name, threatObject.name))
+                        actionResponse = evalCoop(actionResponse, threatObject.GetComponent<Pedestrian>().PeekAction(true, 1), true);
+                }
+                if (actionResponse == 1)
                     newDir = Vector3.RotateTowards(transform.forward, frontVector, Time.deltaTime, 0.0f);
                 else
                     newDir = Vector3.RotateTowards(transform.forward, vectorField.Interpolate(transform.position, target), Time.deltaTime, 0.0f);
@@ -115,6 +131,9 @@ public class Pedestrian : MonoBehaviour
             else if(sideVector.magnitude != 0.0f)
             {
                 int actionResponse = PeekAction(true, 0);
+                GameObject threatObject = sideThreat.gameObject;
+                if (CollisionCounter.StringLessThan(gameObject.name, threatObject.name))
+                    actionResponse = evalCoop(actionResponse, threatObject.GetComponent<Pedestrian>().PeekAction(true, 0), false);
                 if (actionResponse == -1)
                     newDir = Vector3.RotateTowards(transform.forward, sideVector, Time.deltaTime, 0.0f);
                 else if(actionResponse == 1)
@@ -187,9 +206,9 @@ public class Pedestrian : MonoBehaviour
 
     public void UpdateThreat(Collider coll, bool front)
     {
-        if(front)
+        if (front)
         {
-            if (coll != frontThreat)
+            if (frontThreat == null || coll != frontThreat)
             {
                 frontThreat = coll;
                 NewSeed(front);
@@ -197,7 +216,7 @@ public class Pedestrian : MonoBehaviour
         }
         else
         {
-            if (coll != sideThreat)
+            if (sideThreat == null || coll != sideThreat)
             {
                 sideThreat = coll;
                 NewSeed(front);
@@ -214,7 +233,7 @@ public class Pedestrian : MonoBehaviour
         {
             if(direction == 1)
             {
-                if (frontRng < 0.7524429967) return 1;
+                if (frontRng < 0.7524429967 || wallDetected) return 1;
                 else return 0;
             }
             else // == 0
@@ -243,6 +262,29 @@ public class Pedestrian : MonoBehaviour
                 else return 0;
             }
         }
+    }
+
+    int evalCoop(int me, int other, bool front)
+    {
+        //NOT FINISHED
+        if(front)
+        {
+            if(other == 0)
+            {
+                //Returns 1 to make at least one avoid.
+                transform.position += -Vector3.Project(frontThreat.transform.position - transform.position, transform.right).normalized * Time.deltaTime * mSpeed;
+                return 1;
+            }
+        }
+        else
+        {
+            if (me == other)
+            {
+                //Returns whatever else is not already chosen.
+                return ((me + Random.Range(2, 4)) % 3) - 1;
+            }
+        }
+        return me;
     }
 
     /*

@@ -24,7 +24,7 @@ public class FrontDetector : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
+    /*void Update()
     {
         switch (pedestrian.strat)
         {
@@ -41,9 +41,9 @@ public class FrontDetector : MonoBehaviour
                 UpdateBlendWeights();
                 break;
         }
-    }
+    }*/
 
-    void UpdatePriority()
+    public void UpdatePriority()
     {
         closestColliderVector = Vector3.zero;
         adjustedColliderVector = Vector3.zero;
