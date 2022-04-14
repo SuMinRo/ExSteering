@@ -43,7 +43,7 @@ public class FrontDetector : MonoBehaviour
         }
     }*/
 
-    public void UpdatePriority()
+    public void UpdatePriority(bool avoidFrontCongestion)
     {
         closestColliderVector = Vector3.zero;
         adjustedColliderVector = Vector3.zero;
@@ -64,7 +64,7 @@ public class FrontDetector : MonoBehaviour
                 }
 
                 Vector3 colliderVector = collide.transform.position - pedestrian.transform.position;
-                if (Vector3.Dot(collide.transform.forward, pedestrian.transform.forward) < 0 && (closestColliderVector.magnitude > colliderVector.magnitude || closestColliderVector == Vector3.zero))
+                if ((avoidFrontCongestion || Vector3.Dot(collide.transform.forward, pedestrian.transform.forward) < 0) && (closestColliderVector.magnitude > colliderVector.magnitude || closestColliderVector == Vector3.zero))
                 {
                     closestColliderVector = colliderVector;
                     pedestrian.UpdateThreat(collide, true);

@@ -45,6 +45,8 @@ public class Pedestrian : MonoBehaviour
     public Collider frontThreat;
     [HideInInspector]
     public Collider sideThreat;
+    [HideInInspector]
+    public bool avoidFrontCongestion;
 
     [HideInInspector]
     public float startTime;
@@ -112,7 +114,16 @@ public class Pedestrian : MonoBehaviour
         //Autonomous behaviour
         else if (method == SteeringAlgorithm.DevRules)
         {
-            frontDetector.UpdatePriority();
+            float rotateFactor = 1.0f;
+            if (closeVector.magnitude > 0.0f && mSpeed > 0.0f)
+            {
+                mSpeed -= 0.125f;
+                rotateFactor = 4.0f;
+            }
+            else if (mSpeed < maxSpeed)
+                mSpeed += 0.125f;
+
+            frontDetector.UpdatePriority(avoidFrontCongestion);
             sideDetector.UpdatePriority();
             if(frontVector.magnitude != 0.0f)
             {
@@ -124,9 +135,9 @@ public class Pedestrian : MonoBehaviour
                         actionResponse = evalCoop(actionResponse, threatObject.GetComponent<Pedestrian>().PeekAction(true, 1), true);
                 }
                 if (actionResponse == 1)
-                    newDir = Vector3.RotateTowards(transform.forward, frontVector, Time.deltaTime, 0.0f);
+                    newDir = Vector3.RotateTowards(transform.forward, frontVector, Time.deltaTime * rotateFactor, 0.0f);
                 else
-                    newDir = Vector3.RotateTowards(transform.forward, vectorField.Interpolate(transform.position, target), Time.deltaTime, 0.0f);
+                    newDir = Vector3.RotateTowards(transform.forward, vectorField.Interpolate(transform.position, target), Time.deltaTime * rotateFactor, 0.0f);
             }
             else if(sideVector.magnitude != 0.0f)
             {
@@ -135,21 +146,16 @@ public class Pedestrian : MonoBehaviour
                 if (CollisionCounter.StringLessThan(gameObject.name, threatObject.name))
                     actionResponse = evalCoop(actionResponse, threatObject.GetComponent<Pedestrian>().PeekAction(true, 0), false);
                 if (actionResponse == -1)
-                    newDir = Vector3.RotateTowards(transform.forward, sideVector, Time.deltaTime, 0.0f);
+                    newDir = Vector3.RotateTowards(transform.forward, sideVector, Time.deltaTime * rotateFactor, 0.0f);
                 else if(actionResponse == 1)
-                    newDir = Vector3.RotateTowards(transform.forward, sideVector, -Time.deltaTime, 0.0f);
+                    newDir = Vector3.RotateTowards(transform.forward, sideVector, -Time.deltaTime * rotateFactor, 0.0f);
                 else
-                    newDir = Vector3.RotateTowards(transform.forward, vectorField.Interpolate(transform.position, target), Time.deltaTime, 0.0f);
+                    newDir = Vector3.RotateTowards(transform.forward, vectorField.Interpolate(transform.position, target), Time.deltaTime * rotateFactor, 0.0f);
             }
             else
             {
-                newDir = Vector3.RotateTowards(transform.forward, vectorField.Interpolate(transform.position, target), Time.deltaTime, 0.0f);
+                newDir = Vector3.RotateTowards(transform.forward, vectorField.Interpolate(transform.position, target), Time.deltaTime * rotateFactor, 0.0f);
             }
-
-            if (closeVector.magnitude > 0.0f && mSpeed > 0.0f)
-                mSpeed -= 0.125f;
-            else if (mSpeed < maxSpeed)
-                mSpeed += 0.125f;
 
             if(newDir != Vector3.zero)
                 transform.rotation = Quaternion.LookRotation(newDir);
