@@ -241,13 +241,13 @@ public class Pedestrian : MonoBehaviour
         {
             if(direction == 1)
             {
-                if (frontRng < 0.7524429967 || wallDetected) return 1;
+                if (frontRng < 0.8298507463 || wallDetected) return 1;
                 else return 0;
             }
             else // == 0
             {
-                if (sideRng < 0.4986522911) return -1;
-                else if (sideRng < 0.7331536388) return 1;
+                if (sideRng < 0.5459459459) return -1;
+                else if (sideRng < 0.7540540541) return 1;
                 else return 0;
             }
         }
