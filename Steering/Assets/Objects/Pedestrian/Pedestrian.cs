@@ -41,6 +41,8 @@ public class Pedestrian : MonoBehaviour
     FrontDetector frontDetector;
     [SerializeField]
     SideDetector sideDetector;
+    [SerializeField]
+    CloseDetector closeDetector;
     [HideInInspector]
     public Collider frontThreat;
     [HideInInspector]
@@ -118,7 +120,7 @@ public class Pedestrian : MonoBehaviour
             if (closeVector.magnitude > 0.0f && mSpeed > 0.0f)
             {
                 mSpeed -= 0.125f;
-                rotateFactor = 4.0f;
+                rotateFactor = 3.0f;
             }
             else if (mSpeed < maxSpeed)
                 mSpeed += 0.125f;
@@ -278,7 +280,8 @@ public class Pedestrian : MonoBehaviour
             if(other == 0)
             {
                 //Returns 1 to make at least one avoid.
-                transform.position += -Vector3.Project(frontThreat.transform.position - transform.position, transform.right).normalized * Time.deltaTime * mSpeed;
+                if(closeDetector.SearchCollider(frontThreat))
+                    transform.position += -Vector3.Project(frontThreat.transform.position - transform.position, transform.right).normalized * Time.deltaTime * mSpeed;
                 return 1;
             }
         }

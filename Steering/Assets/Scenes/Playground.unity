@@ -288,6 +288,7 @@ GameObject:
   - component: {fileID: 963194228}
   - component: {fileID: 963194227}
   - component: {fileID: 963194226}
+  - component: {fileID: 963194229}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -360,6 +361,36 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 45, y: 45, z: 0}
+--- !u!114 &963194229
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 963194225}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9b65d07eeea82c541a27c2fe75deb957, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  doFocus: 0
+  focusLimit: 100
+  minFocusDistance: 5
+  firstUndoKey: 306
+  secondUndoKey: 122
+  moveSpeed: 0.1
+  rotationSpeed: 10
+  zoomSpeed: 10
+  mouseY: Mouse Y
+  mouseX: Mouse X
+  zoomAxis: Mouse ScrollWheel
+  forwardKey: 119
+  backKey: 115
+  leftKey: 97
+  rightKey: 100
+  flatMoveKey: 304
+  anchoredMoveKey: 325
+  anchoredRotateKey: 324
 --- !u!1001 &1856979480
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -401,7 +432,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3923697614723260004, guid: 2b6e2ffdef4deae4bb1edf5846f98483, type: 3}
       propertyPath: angle
-      value: 120
+      value: 150
       objectReference: {fileID: 0}
     - target: {fileID: 3923697614723260004, guid: 2b6e2ffdef4deae4bb1edf5846f98483, type: 3}
       propertyPath: radius

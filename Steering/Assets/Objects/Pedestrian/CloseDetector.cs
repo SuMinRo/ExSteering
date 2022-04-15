@@ -31,9 +31,9 @@ public class CloseDetector : MonoBehaviour
             }
 
             Vector3 colliderVector = collide.transform.position - pedestrian.transform.position;
-            if (Vector3.Dot(Vector3.Normalize(colliderVector), pedestrian.transform.forward) > Mathf.Cos(Mathf.PI/3) && Vector3.Dot(collide.transform.forward, parent.transform.forward) > 0 && (closestColliderVector.magnitude > colliderVector.magnitude || closestColliderVector == Vector3.zero))
+            if (Vector3.Dot(Vector3.Normalize(colliderVector), pedestrian.transform.forward) > Mathf.Cos(5 * Mathf.PI / 12) && Vector3.Dot(collide.transform.forward, parent.transform.forward) > 0 && (closestColliderVector.magnitude > colliderVector.magnitude || closestColliderVector == Vector3.zero))
                 closestColliderVector = colliderVector;
-            if (Vector3.Dot(Vector3.Normalize(colliderVector), pedestrian.transform.forward) > Mathf.Cos(Mathf.PI / 3) && Vector3.Dot(collide.transform.forward, parent.transform.forward) < 0.5f)
+            if (Vector3.Dot(Vector3.Normalize(colliderVector), pedestrian.transform.forward) > Mathf.Cos(5 * Mathf.PI / 12) && Vector3.Dot(collide.transform.forward, parent.transform.forward) < 0.5f)
             {
                 pedestrian.avoidFrontCongestion = true;
             }
@@ -59,5 +59,15 @@ public class CloseDetector : MonoBehaviour
         {
             colliders.Remove(collide);
         }
+    }
+
+    public bool SearchCollider(Collider wantedCollider)
+    {
+        foreach(Collider collide in colliders.ToList())
+        {
+            if (wantedCollider == collide)
+                return true;
+        }
+        return false;
     }
 }
