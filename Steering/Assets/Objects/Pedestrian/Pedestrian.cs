@@ -49,6 +49,7 @@ public class Pedestrian : MonoBehaviour
     public Collider sideThreat;
     [HideInInspector]
     public bool avoidFrontCongestion;
+    float maxRotationDeviationCos;
 
     [HideInInspector]
     public float startTime;
@@ -65,7 +66,13 @@ public class Pedestrian : MonoBehaviour
             NewSeed(false);
             frontThreat = null;
             sideThreat = null;
-
+            int maxRotationDeviationRNG = Random.Range(0, 62);
+            if (maxRotationDeviationRNG < 6)
+                maxRotationDeviationCos = Mathf.Cos(15.0f * Mathf.PI / 180.0f);
+            else if (maxRotationDeviationRNG < 37)
+                maxRotationDeviationCos = Mathf.Cos(45.0f * Mathf.PI / 180.0f);
+            else
+                maxRotationDeviationCos = Mathf.Cos(75.0f * Mathf.PI / 180.0f);
         }
         else
         {
@@ -160,7 +167,13 @@ public class Pedestrian : MonoBehaviour
             }
 
             if(newDir != Vector3.zero)
-                transform.rotation = Quaternion.LookRotation(newDir);
+            {
+                if (CheckMaxRotation(newDir))
+                    transform.rotation = Quaternion.LookRotation(newDir);
+                else
+                    transform.rotation = Quaternion.LookRotation(Vector3.RotateTowards(transform.forward, vectorField.Interpolate(transform.position, target), Time.deltaTime * rotateFactor, 0.0f));
+            }
+                
         }
         else if (method == SteeringAlgorithm.Gradient)
         {
@@ -204,6 +217,13 @@ public class Pedestrian : MonoBehaviour
         }
 
         //Debug.Log(rng);
+    }
+
+    bool CheckMaxRotation(Vector3 dir)
+    {
+        if (Vector3.Dot(vectorField.Interpolate(transform.position, target).normalized, transform.forward) < maxRotationDeviationCos)
+            return false;
+        return true;
     }
 
     public void NewSeed(bool front)
