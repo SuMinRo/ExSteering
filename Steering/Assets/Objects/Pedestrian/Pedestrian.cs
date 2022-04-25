@@ -6,11 +6,13 @@ public class Pedestrian : MonoBehaviour
 {
     public int numberOfDebug;
 
-    Cardinal source;
-    [HideInInspector]
+    public Cardinal source;
     public Cardinal target;
+    public Vector3 origin;
     public Strategy strat;
     public SteeringAlgorithm method;
+    public float startTime;
+    public float distanceTraveled;
     
     public float mSpeed;
     [HideInInspector]
@@ -51,9 +53,6 @@ public class Pedestrian : MonoBehaviour
     public bool avoidFrontCongestion;
     float maxRotationDeviationCos;
 
-    [HideInInspector]
-    public float startTime;
-
     // Start is called before the first frame update
     void Start()
     {
@@ -76,6 +75,13 @@ public class Pedestrian : MonoBehaviour
         }
         else
         {
+            if (strat == Strategy.None)
+            {
+                gameObject.layer = LayerMask.NameToLayer("Ignore Raycast");
+                gameObject.transform.GetChild(0).gameObject.layer = LayerMask.NameToLayer("Ignore Raycast");
+                gameObject.transform.GetChild(0).GetChild(0).gameObject.layer = LayerMask.NameToLayer("Ignore Raycast");
+            }
+
             hits = new RaycastObject[raycastFidelity + 1];
             for(int i = 0; i <= raycastFidelity; i++)
             {
@@ -91,6 +97,7 @@ public class Pedestrian : MonoBehaviour
 
         frontVector = Vector3.zero;
         startTime = Time.time;
+        distanceTraveled = 0.0f;
     }
 
     public void SetTargetAndSource(Cardinal spawner, Cardinal goal) 
@@ -124,7 +131,7 @@ public class Pedestrian : MonoBehaviour
         else if (method == SteeringAlgorithm.DevRules)
         {
             float rotateFactor = 1.0f;
-            if (closeVector.magnitude > 0.0f && mSpeed > 0.0f)
+            if (closeVector.magnitude > 0.0f && mSpeed > 0.0f && strat != Strategy.None)
             {
                 mSpeed -= 0.125f;
                 rotateFactor = 3.0f;
@@ -132,8 +139,12 @@ public class Pedestrian : MonoBehaviour
             else if (mSpeed < maxSpeed)
                 mSpeed += 0.125f;
 
-            frontDetector.UpdatePriority(avoidFrontCongestion);
-            sideDetector.UpdatePriority();
+            if(strat != Strategy.None)
+            {
+                frontDetector.UpdatePriority(avoidFrontCongestion);
+                sideDetector.UpdatePriority();
+            }
+            
             if(frontVector.magnitude != 0.0f)
             {
                 int actionResponse = PeekAction(true, 1);
@@ -206,7 +217,10 @@ public class Pedestrian : MonoBehaviour
             
             Action(partialDerivativesMovement[0] + partialDerivativesObstacles[0], partialDerivativesMovement[1] + partialDerivativesObstacles[1]);
         }
-        transform.position += transform.forward * Time.deltaTime * mSpeed;
+
+        Vector3 distanceMoved = transform.forward * Time.deltaTime * mSpeed;
+        transform.position += distanceMoved;
+        distanceTraveled += distanceMoved.magnitude;
 
         if (Input.GetKeyDown(KeyCode.UpArrow))
         {

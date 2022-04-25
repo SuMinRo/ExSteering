@@ -59,11 +59,13 @@ public class Spawners : MonoBehaviour
 
     void Spawn(Cardinal spawner)
     {
-        GameObject newPedestrian = Instantiate(pedestrian, new Vector3(Random.Range((float)spawnerBBoxMin[(int)spawner][0] + 0.5f, (float)spawnerBBoxMax[(int)spawner][0] - 0.5f), 1, Random.Range((float)spawnerBBoxMin[(int)spawner][1] + 0.5f, (float)spawnerBBoxMax[(int)spawner][1] - 0.5f)), Quaternion.Euler(0, faceDirection[(int)spawner], 0));
+        Vector3 origin = new Vector3(Random.Range((float)spawnerBBoxMin[(int)spawner][0] + 0.5f, (float)spawnerBBoxMax[(int)spawner][0] - 0.5f), 1, Random.Range((float)spawnerBBoxMin[(int)spawner][1] + 0.5f, (float)spawnerBBoxMax[(int)spawner][1] - 0.5f));
+        GameObject newPedestrian = Instantiate(pedestrian, origin, Quaternion.Euler(0, faceDirection[(int)spawner], 0));
         newPedestrian.name = Random.Range(0, 2147483647).ToString("X8");
         Pedestrian newPedestrianScript = newPedestrian.GetComponent<Pedestrian>();
         Cardinal target = (Cardinal)(((int)spawner + Random.Range(1, 4)) % 4);
         newPedestrianScript.SetTargetAndSource(spawner, target);
+        newPedestrianScript.origin = origin;
         numberOfPedestrians++;
     }
 

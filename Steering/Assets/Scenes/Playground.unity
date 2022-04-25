@@ -132,7 +132,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: -5701324439450470162, guid: a980f9084dbf82c4d9812d7ddc2f1af0, type: 3}
       propertyPath: maxTime
-      value: 1800
+      value: 28800
       objectReference: {fileID: 0}
     - target: {fileID: 2066804123287608722, guid: a980f9084dbf82c4d9812d7ddc2f1af0, type: 3}
       propertyPath: m_Name
@@ -545,6 +545,10 @@ PrefabInstance:
     - target: {fileID: 8727811354964115439, guid: 2b6e2ffdef4deae4bb1edf5846f98483, type: 3}
       propertyPath: m_LocalScale.z
       value: 28
+      objectReference: {fileID: 0}
+    - target: {fileID: 8727811354964115439, guid: 2b6e2ffdef4deae4bb1edf5846f98483, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 25
       objectReference: {fileID: 0}
     - target: {fileID: 8877869030564964991, guid: 2b6e2ffdef4deae4bb1edf5846f98483, type: 3}
       propertyPath: m_IsTrigger

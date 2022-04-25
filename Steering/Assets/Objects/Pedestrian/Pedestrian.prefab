@@ -398,9 +398,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   numberOfDebug: 0
+  source: 0
   target: 0
+  origin: {x: 0, y: 0, z: 0}
   strat: 0
   method: 0
+  startTime: 0
+  distanceTraveled: 0
   mSpeed: 1.5
   maxSpeed: 0
   raycastFidelity: 150
@@ -415,7 +419,6 @@ MonoBehaviour:
   frontThreat: {fileID: 0}
   sideThreat: {fileID: 0}
   avoidFrontCongestion: 0
-  startTime: 0
 --- !u!54 &698056019062443756
 Rigidbody:
   m_ObjectHideFlags: 0
