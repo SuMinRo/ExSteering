@@ -10,8 +10,8 @@ public class Stats : MonoBehaviour
     [SerializeField]
     int maxTime;
 
-    Dictionary<int, DicEntry> oppositeSide;
-    Dictionary<int, DicEntry> nearbySide;
+    public Dictionary<int, DicEntry> oppositeSide;
+    public Dictionary<int, DicEntry> nearbySide;
     Dictionary<int, Vector2> oppositeOptimumDev;
     Dictionary<int, Vector2> nearbyOptimumDev;
     Dictionary<int, Vector2> oppositeOptimumGrad;
@@ -79,10 +79,11 @@ public class Stats : MonoBehaviour
 
     void Update()
     {
-        if (Time.time >= maxTime || Input.GetKeyDown("s"))
+        if (Time.time >= maxTime || Input.GetKeyDown("x"))
         {
             Time.timeScale = 0.0f;
             DisplayStats();
+            UnityEditor.EditorApplication.isPlaying = false;
         }
     }
 
@@ -161,7 +162,7 @@ public class Stats : MonoBehaviour
         Debug.Log("Time: " + Time.time + "\nCollisions: " + counter + ", Walls: " + walls + ", Out of Bounds: " + oob);
         for(int i = -10; i < 10; i++)
         {
-            Debug.Log("Performance: " + oppositeSide[i].GetMean() + " and " + nearbySide[i].GetMean());
+            Debug.Log("Performance: " + oppositeSide[i].GetMean()[0].ToString("F8") + ", " + oppositeSide[i].GetMean()[1].ToString("F8") +  " and " + nearbySide[i].GetMean()[0].ToString("F8") + ", " + nearbySide[i].GetMean()[1].ToString("F8"));
         }
     }
 }
