@@ -75,6 +75,48 @@ public class Stats : MonoBehaviour
         nearbyOptimumDev[7] = new Vector2(26.9f, 40.3f);
         nearbyOptimumDev[8] = new Vector2(27.4f, 41.2f);
         nearbyOptimumDev[9] = new Vector2(27.9f, 41.8f);
+
+        oppositeOptimumGrad[-10] = new Vector2(32.9f, 49.4f);
+        oppositeOptimumGrad[-9] = new Vector2(32.9f, 49.4f);
+        oppositeOptimumGrad[-8] = new Vector2(32.9f, 49.4f);
+        oppositeOptimumGrad[-7] = new Vector2(32.9f, 49.4f);
+        oppositeOptimumGrad[-6] = new Vector2(32.9f, 49.4f);
+        oppositeOptimumGrad[-5] = new Vector2(32.9f, 49.4f);
+        oppositeOptimumGrad[-4] = new Vector2(32.9f, 49.4f);
+        oppositeOptimumGrad[-3] = new Vector2(32.9f, 49.4f);
+        oppositeOptimumGrad[-2] = new Vector2(32.9f, 49.4f);
+        oppositeOptimumGrad[-1] = new Vector2(32.9f, 49.4f);
+        oppositeOptimumGrad[0] = new Vector2(32.9f, 49.4f);
+        oppositeOptimumGrad[1] = new Vector2(32.9f, 49.4f);
+        oppositeOptimumGrad[2] = new Vector2(32.9f, 49.4f);
+        oppositeOptimumGrad[3] = new Vector2(32.9f, 49.4f);
+        oppositeOptimumGrad[4] = new Vector2(32.9f, 49.4f);
+        oppositeOptimumGrad[5] = new Vector2(32.9f, 49.4f);
+        oppositeOptimumGrad[6] = new Vector2(32.9f, 49.4f);
+        oppositeOptimumGrad[7] = new Vector2(32.9f, 49.4f);
+        oppositeOptimumGrad[8] = new Vector2(32.9f, 49.4f);
+        oppositeOptimumGrad[9] = new Vector2(32.9f, 49.4f);
+
+        nearbyOptimumGrad[-10] = new Vector2(15.8f, 23.7f);
+        nearbyOptimumGrad[-9] = new Vector2(16.0f, 23.9f);
+        nearbyOptimumGrad[-8] = new Vector2(16.2f, 24.3f);
+        nearbyOptimumGrad[-7] = new Vector2(16.6f, 24.8f);
+        nearbyOptimumGrad[-6] = new Vector2(17.0f, 25.4f);
+        nearbyOptimumGrad[-5] = new Vector2(17.4f, 26.1f);
+        nearbyOptimumGrad[-4] = new Vector2(17.9f, 26.8f);
+        nearbyOptimumGrad[-3] = new Vector2(18.4f, 27.5f);
+        nearbyOptimumGrad[-2] = new Vector2(18.9f, 28.2f);
+        nearbyOptimumGrad[-1] = new Vector2(19.4f, 29.0f);
+        nearbyOptimumGrad[0] = new Vector2(19.9f, 29.8f);
+        nearbyOptimumGrad[1] = new Vector2(20.5f, 30.6f);
+        nearbyOptimumGrad[2] = new Vector2(21.0f, 31.5f);
+        nearbyOptimumGrad[3] = new Vector2(21.6f, 32.3f);
+        nearbyOptimumGrad[4] = new Vector2(22.2f, 33.2f);
+        nearbyOptimumGrad[5] = new Vector2(22.7f, 34.0f);
+        nearbyOptimumGrad[6] = new Vector2(23.3f, 34.9f);
+        nearbyOptimumGrad[7] = new Vector2(23.9f, 35.8f);
+        nearbyOptimumGrad[8] = new Vector2(24.5f, 36.8f);
+        nearbyOptimumGrad[9] = new Vector2(25.0f, 37.4f);
     }
 
     void Update()
@@ -159,11 +201,12 @@ public class Stats : MonoBehaviour
 
     public void DisplayStats()
     {
-        Debug.Log("Time: " + Time.time + "\nCollisions: " + counter + ", Walls: " + walls + ", Out of Bounds: " + oob);
-        for(int i = -10; i < 10; i++)
+        string s = ("Time: " + Time.time + "\nCollisions: " + counter + ", Walls: " + walls + ", Out of Bounds: " + oob + "\n\n");
+        for (int i = -10; i < 10; i++)
         {
-            Debug.Log("Performance: " + oppositeSide[i].GetMean()[0].ToString("F8") + ", " + oppositeSide[i].GetMean()[1].ToString("F8") +  " and " + nearbySide[i].GetMean()[0].ToString("F8") + ", " + nearbySide[i].GetMean()[1].ToString("F8"));
+            s += (string.Format("{0, 3}", i) + " Performance: " + oppositeSide[i].GetMean()[0].ToString("F8") + ", " + oppositeSide[i].GetMean()[1].ToString("F8") +  " and " + nearbySide[i].GetMean()[0].ToString("F8") + ", " + nearbySide[i].GetMean()[1].ToString("F8") + "\n");
         }
+        Debug.Log(s);
     }
 }
 
