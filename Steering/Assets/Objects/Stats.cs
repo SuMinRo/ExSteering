@@ -30,6 +30,15 @@ public class Stats : MonoBehaviour
     Dictionary<int, Vector2> oppositeOptimumGrad;
     Dictionary<int, Vector2> nearbyOptimumGrad;
 
+    //Just for results report
+    [SerializeField]
+    SteeringAlgorithm method;
+    [SerializeField]
+    Congestion congestion;
+    [SerializeField]
+    SceneType sceneType;
+
+
     void Start()
     {
         spawners = GameObject.Find("Spawners").GetComponent<Spawners>();
@@ -266,6 +275,8 @@ public class Stats : MonoBehaviour
         string s = ("Time: " + Time.time + "\nCollisions: " + counter + ", Walls: " + walls + ", Out of Bounds: " + oob + "\n\n");
         if (testType == TypeOfTest.SigmaTesting)
             s += ("Test Number: " + testNumber + "\nSigmas: " + sigmas + "\n\n");
+        else
+            s += ("Scene: " + sceneType + "\nMethod: " + method + "\nCongestion: " + congestion + "\n\n");
         for (int i = -10; i < 10; i++)
         {
             s += (string.Format("{0, 3}", i) + " Performance: " + oppositeSide[i].GetMean()[0].ToString("F8") + ", " + oppositeSide[i].GetMean()[1].ToString("F8") +  ", " + nearbySide[i].GetMean()[0].ToString("F8") + ", " + nearbySide[i].GetMean()[1].ToString("F8") + "\n");
@@ -313,4 +324,11 @@ public enum TypeOfTest
 {
     Regular,
     SigmaTesting
+}
+
+public enum Congestion
+{
+    Low,
+    Medium,
+    High
 }
