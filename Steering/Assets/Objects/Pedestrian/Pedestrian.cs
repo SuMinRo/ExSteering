@@ -23,10 +23,10 @@ public class Pedestrian : MonoBehaviour
     [SerializeField]
     int raycastFidelity;
     //alpha, speed, ttca, dca
-    [SerializeField]
     Vector4 sigmas;
     Collider spawnerTarget;
     bool skip;
+    Stats stats;
 
     [HideInInspector]
     public Vector3 frontVector;
@@ -91,6 +91,8 @@ public class Pedestrian : MonoBehaviour
             gameObject.transform.Find("SideDetector").gameObject.SetActive(false);
             gameObject.transform.Find("CloseDetector").gameObject.SetActive(false);
             spawnerTarget = GameObject.Find(target.ToString() + "Spawner").GetComponent<Collider>();
+            stats = GameObject.Find("Stats").GetComponent<Stats>();
+            sigmas = stats.GetSigmas();
         }
         
         maxSpeed = mSpeed;
@@ -212,7 +214,7 @@ public class Pedestrian : MonoBehaviour
             Vector2 partialDerivativesMovement = PartialDerivativeMovement(sigmas[0], sigmas[1]);
             if(float.IsNaN(partialDerivativesMovement[0] + partialDerivativesMovement[1] + partialDerivativesObstacles[0] + partialDerivativesObstacles[1]) || float.IsInfinity(partialDerivativesMovement[0] + partialDerivativesMovement[1] + partialDerivativesObstacles[0] + partialDerivativesObstacles[1]))
             {
-                Debug.Log(partialDerivativesMovement + "\n" + partialDerivativesObstacles);
+                //Debug.Log(partialDerivativesMovement + "\n" + partialDerivativesObstacles);
             }
             
             Action(partialDerivativesMovement[0] + partialDerivativesObstacles[0], partialDerivativesMovement[1] + partialDerivativesObstacles[1]);

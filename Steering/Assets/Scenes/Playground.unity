@@ -134,6 +134,50 @@ PrefabInstance:
       propertyPath: maxTime
       value: 72000
       objectReference: {fileID: 0}
+    - target: {fileID: -5701324439450470162, guid: a980f9084dbf82c4d9812d7ddc2f1af0, type: 3}
+      propertyPath: sigmas.w
+      value: 0.3
+      objectReference: {fileID: 0}
+    - target: {fileID: -5701324439450470162, guid: a980f9084dbf82c4d9812d7ddc2f1af0, type: 3}
+      propertyPath: sigmas.x
+      value: 2.5
+      objectReference: {fileID: 0}
+    - target: {fileID: -5701324439450470162, guid: a980f9084dbf82c4d9812d7ddc2f1af0, type: 3}
+      propertyPath: sigmas.y
+      value: 1.5
+      objectReference: {fileID: 0}
+    - target: {fileID: -5701324439450470162, guid: a980f9084dbf82c4d9812d7ddc2f1af0, type: 3}
+      propertyPath: sigmas.z
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: -5701324439450470162, guid: a980f9084dbf82c4d9812d7ddc2f1af0, type: 3}
+      propertyPath: testType
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -5701324439450470162, guid: a980f9084dbf82c4d9812d7ddc2f1af0, type: 3}
+      propertyPath: minSigmas.x
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: -5701324439450470162, guid: a980f9084dbf82c4d9812d7ddc2f1af0, type: 3}
+      propertyPath: minSigmas.y
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: -5701324439450470162, guid: a980f9084dbf82c4d9812d7ddc2f1af0, type: 3}
+      propertyPath: minSigmas.z
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: -5701324439450470162, guid: a980f9084dbf82c4d9812d7ddc2f1af0, type: 3}
+      propertyPath: sigmaIncs.x
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: -5701324439450470162, guid: a980f9084dbf82c4d9812d7ddc2f1af0, type: 3}
+      propertyPath: sigmaIncs.y
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: -5701324439450470162, guid: a980f9084dbf82c4d9812d7ddc2f1af0, type: 3}
+      propertyPath: sigmaIncs.z
+      value: 0.7
+      objectReference: {fileID: 0}
     - target: {fileID: 2066804123287608722, guid: a980f9084dbf82c4d9812d7ddc2f1af0, type: 3}
       propertyPath: m_Name
       value: Stats

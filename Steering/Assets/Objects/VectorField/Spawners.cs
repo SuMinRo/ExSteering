@@ -73,6 +73,11 @@ public class Spawners : MonoBehaviour
     {
         numberOfPedestrians--;
     }
+
+    public void ResetNumberOfPedestrians()
+    {
+        numberOfPedestrians = 0;
+    }
 }
 
 public enum Cardinal
