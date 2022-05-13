@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 //using System;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class Spawners : MonoBehaviour
 {
@@ -19,11 +20,13 @@ public class Spawners : MonoBehaviour
     GameObject pedestrian;
     int[] enums = (int[])Cardinal.GetValues(typeof(Cardinal));
     IEnumerator spawner;
+    string sceneName;
 
     // Start is called before the first frame update
     void Start()
     {
-        foreach(int dir in enums)
+        sceneName = SceneManager.GetActiveScene().name;
+        foreach (int dir in enums)
         {
             Vector3 bBoxMin = spawners[dir].GetComponent<BoxCollider>().bounds.min;
             spawnerBBoxMin[dir] = new Vector2(bBoxMin[0], bBoxMin[2]);
@@ -51,7 +54,11 @@ public class Spawners : MonoBehaviour
             yield return new WaitForSeconds(spawnDelay);
             if (numberOfPedestrians < maxNumberOfPedestrians)
             {
-                Cardinal randomCardinal = (Cardinal)enums[Random.Range(0, 4)];
+                Cardinal randomCardinal = Cardinal.East;
+                if (sceneName == "Fourway")
+                    randomCardinal = (Cardinal)enums[Random.Range(0, 4)];
+                else if(sceneName == "Threeway")
+                    randomCardinal = (Cardinal)enums[Random.Range(0, 3)];
                 Spawn(randomCardinal);
             }
         }
@@ -63,7 +70,11 @@ public class Spawners : MonoBehaviour
         GameObject newPedestrian = Instantiate(pedestrian, origin, Quaternion.Euler(0, faceDirection[(int)spawner], 0));
         newPedestrian.name = Random.Range(0, 2147483647).ToString("X8");
         Pedestrian newPedestrianScript = newPedestrian.GetComponent<Pedestrian>();
-        Cardinal target = (Cardinal)(((int)spawner + Random.Range(1, 4)) % 4);
+        Cardinal target = Cardinal.East;
+        if (sceneName == "Fourway")
+            target = (Cardinal)(((int)spawner + Random.Range(1, 4)) % 4);
+        else if (sceneName == "Threeway")
+            target = (Cardinal)(((int)spawner + Random.Range(1, 3)) % 3);
         newPedestrianScript.SetTargetAndSource(spawner, target);
         newPedestrianScript.origin = origin;
         numberOfPedestrians++;
