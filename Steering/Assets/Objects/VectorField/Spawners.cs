@@ -20,12 +20,11 @@ public class Spawners : MonoBehaviour
     GameObject pedestrian;
     int[] enums = (int[])Cardinal.GetValues(typeof(Cardinal));
     IEnumerator spawner;
-    string sceneName;
+    public SceneType sceneType;
 
     // Start is called before the first frame update
     void Start()
     {
-        sceneName = SceneManager.GetActiveScene().name;
         foreach (int dir in enums)
         {
             Vector3 bBoxMin = spawners[dir].GetComponent<BoxCollider>().bounds.min;
@@ -54,11 +53,23 @@ public class Spawners : MonoBehaviour
             yield return new WaitForSeconds(spawnDelay);
             if (numberOfPedestrians < maxNumberOfPedestrians)
             {
-                Cardinal randomCardinal = Cardinal.East;
-                if (sceneName == "Fourway")
-                    randomCardinal = (Cardinal)enums[Random.Range(0, 4)];
-                else if(sceneName == "Threeway")
-                    randomCardinal = (Cardinal)enums[Random.Range(0, 3)];
+                Cardinal randomCardinal;
+                switch (sceneType)
+                {
+                    case SceneType.Fourway:
+                        randomCardinal = (Cardinal)enums[Random.Range(0, 4)];
+                        break;
+                    case SceneType.Threeway:
+                        randomCardinal = (Cardinal)enums[Random.Range(0, 3)];
+                        break;
+                    case SceneType.Twoway:
+                        randomCardinal = (Cardinal)enums[Random.Range(0, 2)];
+                        break;
+                    default:
+                        randomCardinal = (Cardinal)enums[Random.Range(0, 2) * 2];
+                        break;
+                }
+
                 Spawn(randomCardinal);
             }
         }
@@ -70,11 +81,22 @@ public class Spawners : MonoBehaviour
         GameObject newPedestrian = Instantiate(pedestrian, origin, Quaternion.Euler(0, faceDirection[(int)spawner], 0));
         newPedestrian.name = Random.Range(0, 2147483647).ToString("X8");
         Pedestrian newPedestrianScript = newPedestrian.GetComponent<Pedestrian>();
-        Cardinal target = Cardinal.East;
-        if (sceneName == "Fourway")
-            target = (Cardinal)(((int)spawner + Random.Range(1, 4)) % 4);
-        else if (sceneName == "Threeway")
-            target = (Cardinal)(((int)spawner + Random.Range(1, 3)) % 3);
+        Cardinal target;
+        switch (sceneType)
+        {
+            case SceneType.Fourway:
+                target = (Cardinal)(((int)spawner + Random.Range(1, 4)) % 4);
+                break;
+            case SceneType.Threeway:
+                target = (Cardinal)(((int)spawner + Random.Range(1, 3)) % 3);
+                break;
+            case SceneType.Twoway:
+                target = (Cardinal)(((int)spawner + 1) % 2);
+                break;
+            default:
+                target = (Cardinal)(((int)spawner + 2) % 4);
+                break;
+        }
         newPedestrianScript.SetTargetAndSource(spawner, target);
         newPedestrianScript.origin = origin;
         numberOfPedestrians++;
@@ -97,4 +119,12 @@ public enum Cardinal
     East,
     South,
     West
+}
+
+public enum SceneType
+{
+    Fourway,
+    Threeway,
+    Twoway,
+    Gauntlet
 }

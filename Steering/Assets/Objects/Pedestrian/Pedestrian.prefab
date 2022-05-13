@@ -402,13 +402,12 @@ MonoBehaviour:
   target: 0
   origin: {x: 0, y: 0, z: 0}
   strat: 0
-  method: 1
+  method: 0
   startTime: 0
   distanceTraveled: 0
   mSpeed: 1.5
   maxSpeed: 0
   raycastFidelity: 150
-  sigmas: {x: 4, y: 3.3, z: 7.2, w: 0.6}
   frontVector: {x: 0, y: 0, z: 0}
   wallDetected: 0
   sideVector: {x: 0, y: 0, z: 0}

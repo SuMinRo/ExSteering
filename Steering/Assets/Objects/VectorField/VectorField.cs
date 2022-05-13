@@ -53,6 +53,36 @@ public class VectorField : MonoBehaviour
                 }
             }
         }
+
+        GameObject[] walls = new GameObject[3];
+        int it = 0;
+        foreach(GameObject obj in FindObjectsOfType(typeof(GameObject)) as GameObject[])
+        {
+            if (obj.name.Contains("Wall"))
+            {
+                walls[it++] = obj;
+            }
+
+        }
+        //0 = West, 1 = South, 2 = East
+        switch(GameObject.Find("Spawners").GetComponent<Spawners>().sceneType)
+        {
+            case SceneType.Fourway:
+                walls[0].SetActive(false);
+                walls[1].SetActive(false);
+                walls[2].SetActive(false);
+                break;
+            case SceneType.Threeway:
+                walls[1].SetActive(false);
+                walls[2].SetActive(false);
+                break;
+            case SceneType.Twoway:
+                walls[2].SetActive(false);
+                break;
+            case SceneType.Gauntlet:
+                walls[1].SetActive(false);
+                break;
+        }
         //Debug.Log(vertices[0] + ", " + vertices[dims[1] - 1] + ", " + vertices[dims[1] * (dims[0] - 1)] + ", " + vertices[dims[0]*dims[1]-1]);
     }
 
