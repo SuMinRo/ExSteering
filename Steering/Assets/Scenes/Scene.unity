@@ -131,6 +131,10 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: -5701324439450470162, guid: a980f9084dbf82c4d9812d7ddc2f1af0, type: 3}
+      propertyPath: method
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -5701324439450470162, guid: a980f9084dbf82c4d9812d7ddc2f1af0, type: 3}
       propertyPath: maxTime
       value: 72000
       objectReference: {fileID: 0}
@@ -153,6 +157,10 @@ PrefabInstance:
     - target: {fileID: -5701324439450470162, guid: a980f9084dbf82c4d9812d7ddc2f1af0, type: 3}
       propertyPath: testType
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -5701324439450470162, guid: a980f9084dbf82c4d9812d7ddc2f1af0, type: 3}
+      propertyPath: congestion
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: -5701324439450470162, guid: a980f9084dbf82c4d9812d7ddc2f1af0, type: 3}
       propertyPath: minSigmas.x
@@ -245,11 +253,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7509011761757333856, guid: cb303732112bad74eb89c94a5c9f7637, type: 3}
       propertyPath: spawnDelay
-      value: 0.2
+      value: 0.6666667
       objectReference: {fileID: 0}
     - target: {fileID: 7509011761757333856, guid: cb303732112bad74eb89c94a5c9f7637, type: 3}
       propertyPath: maxNumberOfPedestrians
-      value: 25
+      value: 30
       objectReference: {fileID: 0}
     - target: {fileID: 8550035007501039320, guid: cb303732112bad74eb89c94a5c9f7637, type: 3}
       propertyPath: m_RootOrder
