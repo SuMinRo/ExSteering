@@ -1,4 +1,26 @@
-f = open("/Users/filip/Documents/GitHub/ExSteering/results.txt", 'r')
+import os
+
+def sumTuples(matrices):
+    res = []
+    partRes = []
+    for matrix in matrices:
+        partRes = [0.0 for i in range(2)]
+        for row in matrix:
+            partRes[0] += row[0]
+            partRes[1] += row[1]
+            partRes[0] += row[2]
+            partRes[1] += row[3]
+        if matrix[0][0] == 0.0 or matrix[0][2] == 0.0:
+            partRes[0] /= 20
+            partRes[1] /= 20
+        else:
+            partRes[0] /= 40
+            partRes[1] /= 40
+        res.append(tuple(partRes))
+    return tuple(res)
+
+
+f = open(os.getcwd() + "\\results.txt", 'r')
 raw = f.readlines()
 f.close()
 i = 0
@@ -46,5 +68,8 @@ for tup in collisions:
     s += str(tup[:-1])[1:-1] + "; "
 s = s[:-2] + "];"
 
-
 print(s)
+
+processedRatios = sumTuples(ratios)
+for line in processedRatios:
+    print(line)
