@@ -49,7 +49,7 @@ public class VectorField : MonoBehaviour
                     //vectors[i, j] = new Vector2(vertex[2], -vertex[0]).normalized;
                     vectors[(int)dir, i, j] = explicitVectors[i, j];
                     //Debug.Log(i + ", " + j + " -> " + vectors[i, j]);
-                    Debug.DrawLine(plane.transform.TransformPoint(vertex) + new Vector3(0, 0.5f, 0), plane.transform.TransformPoint(vertex) + new Vector3(vectors[(int)dir, i, j][0], 0.5f, vectors[(int)dir, i, j][1]), debugColors[(int)dir], 10000.0f, true);
+                    //if(dir == Cardinal.North) Debug.DrawLine(plane.transform.TransformPoint(vertex) + new Vector3(0, 0.5f, 0), plane.transform.TransformPoint(vertex) + new Vector3(vectors[(int)dir, i, j][0], 0.5f, vectors[(int)dir, i, j][1]), debugColors[(int)dir], 10000.0f, true);
                 }
             }
         }

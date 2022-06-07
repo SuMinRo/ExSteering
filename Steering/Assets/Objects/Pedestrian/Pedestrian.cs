@@ -72,6 +72,12 @@ public class Pedestrian : MonoBehaviour
                 maxRotationDeviationCos = Mathf.Cos(45.0f * Mathf.PI / 180.0f);
             else
                 maxRotationDeviationCos = Mathf.Cos(75.0f * Mathf.PI / 180.0f);
+            if (gameObject.name[7] != '0')
+            {
+                gameObject.transform.Find("FrontDetector").gameObject.GetComponent<Renderer>().enabled = false;
+                gameObject.transform.Find("SideDetector").gameObject.GetComponent<Renderer>().enabled = false;
+                gameObject.transform.Find("CloseDetector").gameObject.GetComponent<Renderer>().enabled = false;
+            }
         }
         else
         {
@@ -197,7 +203,8 @@ public class Pedestrian : MonoBehaviour
             {
                 if (Physics.Raycast(transform.position, transform.TransformDirection(hit.dir * Vector3.forward), out hit.hit, 12, layerMask))
                 {
-                    //Debug.DrawRay(transform.position, transform.TransformDirection(hit.dir * Vector3.forward) * hit.hit.distance, Color.red);
+                    if (gameObject.name[7] == '0')
+                        Debug.DrawRay(transform.position, transform.TransformDirection(hit.dir * Vector3.forward) * hit.hit.distance, Color.red);
                     hit.Perception();
                     amountOfHits++;
                     hit.Evaluation(sigmas[2], sigmas[3]);
@@ -205,7 +212,8 @@ public class Pedestrian : MonoBehaviour
                 }
                 else
                 {
-                    //Debug.DrawRay(transform.position, transform.TransformDirection(hit.dir * Vector3.forward) * 12, Color.green);
+                    if (gameObject.name[7] == '0')
+                        Debug.DrawRay(transform.position, transform.TransformDirection(hit.dir * Vector3.forward) * 12, Color.green);
                 }
             }
             if(amountOfHits != 0)
@@ -364,7 +372,7 @@ public class Pedestrian : MonoBehaviour
         mSpeed -= newSpeed;
         if (mSpeed < 0.0f) mSpeed = 0.0f;
         Vector3 gradualRotation = Vector3.RotateTowards(transform.forward, Quaternion.Euler(0, (newAngle + Random.Range(-0.1f, 0.1f)) * 180.0f / Mathf.PI, 0) * transform.forward, mSpeed * Time.deltaTime, 0.0f);
-        Debug.DrawRay(transform.position, Quaternion.Euler(0, newAngle * 180.0f / Mathf.PI, 0) * transform.forward, Color.blue);
+        //Debug.DrawRay(transform.position, Quaternion.Euler(0, newAngle * 180.0f / Mathf.PI, 0) * transform.forward, Color.blue);
         transform.rotation = Quaternion.LookRotation(gradualRotation);
     }
 }
@@ -402,6 +410,8 @@ class RaycastObject
     float dca;
 
     float cost;
+
+    bool showRayCast;
 
     public RaycastObject(Pedestrian ped, int angle)
     {

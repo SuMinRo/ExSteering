@@ -402,7 +402,7 @@ MonoBehaviour:
   target: 0
   origin: {x: 0, y: 0, z: 0}
   strat: 0
-  method: 1
+  method: 0
   startTime: 0
   distanceTraveled: 0
   mSpeed: 1.5
