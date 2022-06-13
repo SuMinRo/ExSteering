@@ -1,0 +1,177 @@
+Opposition report*
+
+Comment to the student: Master’s projects vary considerably. If a question does not feel to be relevant to the project your are opposing, try to rephrase it. You may also introduce one or two additional questions. Answer the questions in the Opponent Record in relative detail. Answers such as yes and good are insufficient.
+
+*Based on Kerstin Frenckner’s original. 
+
+---------	
+
+
+OPPOSITION INFORMATION
+
+The author of the thesis: Nikita Sarker
+The title of the thesis: Cone Tracing for Rendering Fur with Yocto-GL
+The name of the opponent: Filip Berendt
+The date of the opposition: 2022-06-17
+
+EVALUATION
+
+Was it easy to understand the underlying purpose of the project?
+
+Yes. I had a good assumption going in to the reading, based on my own experiences. But the author has taken this assumption and confirmed it, backed up with sources and examples
+
+Do you consider that the report title justly reflects the contents of the report?
+
+Adequately, though I am personally missing some kind of reference to testing the cylinder primitive with Yocto-GL, as the methodology implies extending Yocto-GL in terms of both adding the cylinder primitive *and* implementing cone tracing.
+
+How did the author describe the project background?
+
+I would've liked to see a representative set of some previous efforts to tackle the problems the author is trying to overcome, and how she relates or differs from their efforts. Having a 'Related Works'-section, where each important paper is presented atomically and singularily, and how it is relevant to the study is really helpful, instead of having each extracted component of them as sections/subsections and mentioning the related papers as part of that. 
+I'm also missing a final section where the author can tie everything together to ease the transition to the next chapter. Like, she has mentioned many thing, and now she can tell explicitly how they will be relevant in the upcoming chapter.
+
+Was there an introduction and general survey of this area?
+
+Yes, it was adequate. Could've been a bit more detailed, but it suffices.
+
+To what degree did the author justify his/her choice of method of tackling the problem?
+
+A satisfactory degree. The choice that needed the most justification was the graphics library, because those reasons cannot be inferred by the knowledgable readed, and it was thoroughly justified. The rest, e.g. why she's trying a cylinder primitive and not e.g. triangles, cones, pyramids, etc. *can* be inferred, but this requires knowledge within the area I don't think can be assumed of the general intended reader. It would have sufficed with "this choice is arbitrary", if that was the case. This was done in Chapter 2.
+As for chapter 3, there are some further, more practical mentioned justification, but never in contrast to any alternative. I know from here that e.g. Yocto-GL is viable for use, but not that it is the 'best' or 'good enough' choice.
+
+Did the author discuss the extent to which the prerequisites for the application of such a method are fulfilled?
+
+Yes, implicitly. I do have a fair understanding what is required to replicate this study myself.
+
+Is the method adequately described?
+
+I do think so. The description suffers a bit from referencing the bracketed notation directly, instead of pairing it with an author or a title.
+
+Did the author present his/her results clearly and concisely?
+
+Yes, with a few, minor points unclear until the entirety of the results were presented.
+
+Do you consider the author’s conclusions to be credible? 
+
+What is your opinion of the bibliography? What types of literature are included? Do you feel they are relevant? 
+
+Which sections of the report were difficult to understand? 
+
+Other comments on the report and its structure? 
+
+What are the strong aspects of the work/report? 
+
+What are the weak aspects of the work/report? 
+
+What is your estimation of the news value of the work? 
+
+Summarize the work in a few lines.
+
+Questions to author that could be asked at the seminar (please list ca. six questions)
+
+So, e.g. lions do not typically have fur absolutely everywhere, like their eyes, nose, lips, paw pads, etc. How applicable is it to your work project to specify different areas of the models to not apply fur at all, or to apply fur in with different setting than for the rest?
+Typically, furred animals do not have absolutely pitch-black skin. Is it intended to be this way for the render? I'd figure that matching the color of the skin with the color of the fur in some informed manner could help sell the realism of the render.
+Could you perhaps have combined your 2 main research questions, thus combining both your extensions? Would that have been interesting?
+
+What is your concluding assessment of this Master’s project?
+
+Typos:
+
+For the cases of (), letters within are suggested for removal. For the cases of [], letters within ar suggested for addition. Entire sentences or parts of them will be paired with a suggestion to replace it entirely.
+
+This will be tested through comparing how well a reference photo(s) can be recreated.
+
+The difference in visual appear[ance] is difficult...
+
+... images.[ ]The second ...
+
+... specific input scenarios.[ ]The disadvantages ...
+
+However, Embree is not designed for this purpose(d), ...
+
+"And then explains the implementation for the extensions:" Maybe 'Then, the implementation for the extensions are explained:'?
+
+"extend-ability" It makes sense, but 'extendibility' is also a word.
+
+"In order (to) improve the modelling of the hair fibres"
+
+"the angle of reflection is equal to the angle of incidence (around)[at] the normal[ of the object surface]."
+
+"... multiple rays are cast (towards)[from/through?] each pixel (in)[to/in order to] increase the chance of interacting with the light source."
+
+"cox-box intersections" I suppose it is 'cone-box intersection', as mentioned elsewhere?
+
+"Despite these similarities, the rendering time(s) [is] not as fast."
+
+Notes:
+
+Weird to outline the first chapter, when you're already at the end of it.
+
+"The implementation is harder since for each ray can bounce off objects in the scene and become 10 or 20 rays [12]" I'd rather say that a single ray may generate additional rays as they reflect on surfaces in an exponential manner.
+
+"For more detailed images, such as human hair and furry objects, ray tracing provides benefits over rasterization." Why?
+
+It throws me off that there are two different reference notation practices. One is superscripting and the other is square bracketing.
+
+"it had a minimal design structure that did not consist of any Object Orientated Programming" Why is this to be avoided?
+
+"However in the study of fur rendering, where each hair fibre is thin and short, the results of RQ2 indicate human perception cannot differentiate between certain primitives." It could be more clear that in the *specific* case of rendering short hair strands, human perception cannot differentiate. I mean, there are long-haired animals, after all.
+
+"A BVH (bounding volume hierarchy)" I'd rather see you introduce the concept of bounding volume hierarchy outside the brackets, and then introduce the acronym in brackets. Further mentions of the acronym can remain the same.
+
+"This type of bounding box is called an AABB (axis-aligned bounding box)." Same as above.
+
+"OBB (object-orientated bounding box)." Same as above.
+
+2.5 has no preamble. It's not a requisite, but it really helps prepare the reader for what is to come. If it feels too much like you're repeating yourself, maybe move that which would be repeated there?
+
+"The spread of the cones are calculated so that the cone covers one pixel on the image plane." So, do this assume that pixels are ovoid-shaped? If not, and they are going with the rectangle shape, clarify that the word "cone" in this manner still applies, despite being pyramidal-shaped. It becomes clear at figure 7 that it is ovoid-shape; too late in my opinion.
+
+I don't think references done with bracket notation as the singular text object is helpful to the reader. I do think they have to be paired up either with the responsible authors or with the title of their paper. E.g. 'Markram et al.[1]' or 'Autonomous pedestrians[2]'.
+
+Beam tracing is mentioned out of nowhere, while cone tracing has been mentioned extensively. Will it be used? Is it just mentioned as a contrast?
+
+"Ideally, hairs would grow perpendicular to the surface..." Ideal in which sense?
+
+I suppose it could be more clear that each hair strand won't necessarily be a single straight segment. I was lead to believe that until 3.3.
+
+I really like the massive comparison of the bunny rendered using different settings. It is a *really* good visual aid what each setting does. What I am missing however is a highlight which of the images are identical the original from figure 4b. Also, I do think that for the cases where the original has a non-zero value, that it should be in the middle, and otherwise, it can be left-most.
+
+Table 2 comes out of nowhere. I'd like to see some reference to it. Steps is also inexplicably missing from it, and from figure 5. Is that because it will be a static 1? Evidently not the case, when arriving at 4.1.2.
+
+Will the ray-oriented ribbons always have their normals as parallel to the ray cast as possible? I'd assume so, but please make it clear.
+
+"[Path Tracing] This mimics real-life more accurately so path tracing is a popular approach." Does it? I'd say that it is a good montecarlo approximation, because of the computational limits. Perfect ray tracing doesn't really exist yet.
+
+"The cone is designed so that when it intersects the image plane, the diameter of the cone is equal to the width of a pixel." Wouldn't this potentially cause cones not always completely covering the area of a pixel, especially for the the pixels most off-center?
+
+"A publicly available lion cub model was downloaded from the internet." What is this repository? Describe it briefly.
+
+"Keeping to neutral colours to maintain the realistic aspect of the cub fur, ..." 'Neutral' and 'Realistic' according to who?
+
+In figure 11, it would be great to have an indication as to where on the non-zoomed image the close-ups depict. Also, did you produce those images? Or are they from another study?
+
+Is it intended to have the "skin" of the object to be any arbitrary color? I'd figure that matching the color of the skin with the color of the fur in some informed manner could help sell the realism of the render.
+
+Could you perhaps have combined your 2 main research questions? Would that have been interesting?
+
+I do think the preamble for chapter 4 is better suited for 4.1, where there is none. The preamble could describe the overview for the entire chapter instead.
+
+Having numbering for subsubsections is a bit unbecoming. 3 numbers maximum, in my opinion. It is fine that they do not have numbers at this point.
+
+Figure 14 is a bit small. I'd like to see the whole text width (if not more) be used, and rather have the different primitives in each row. Remember that the focus is supposedly interesting to compare the different primitives as settings, not how many more strands of fur per pixel. Figure 17 fulfills this focus better.
+
+Figure 15, 16, as mentioned with 11, reference which section is being zoomed.
+
+Figure 15, 16, and 17 could be more appropriately placed to not interfere with the next subsection for RQ2, where they're irrelevant and distracting.
+
+In figure 18, it is evident that 200 samples was indeed surplus. Although, that could've been identified already at ~90-100 samples, due to the convergent property of the RMSE. It is ok that it is arbitrary, and that you discover it mid-method.
+
+I would've liked to see the spheres rendered.
+
+I find myself wondering if my perception of the Stanford Bunny or Cube rendered using few samples per pixel is biased due to the rendered background. I can't help but think that it is an unnecessary potential bias.
+
+What is that white color on the bottom of the bunny in figure 22o-t? Also, remind the reader that the darker the color, the less difference. Goes for figure 26 also.
+
+The fontsize of captions for some subfigures is comically large. I don't mind personally, but it does throw me off.
+
+Table 9, this threshold need to be motivated somewhere.
