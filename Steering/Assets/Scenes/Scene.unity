@@ -499,7 +499,7 @@ MonoBehaviour:
   minFocusDistance: 5
   firstUndoKey: 306
   secondUndoKey: 122
-  moveSpeed: 0.1
+  moveSpeed: 1
   rotationSpeed: 10
   zoomSpeed: 10
   mouseY: Mouse Y
