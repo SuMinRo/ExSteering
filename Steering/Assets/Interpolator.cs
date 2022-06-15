@@ -15,8 +15,8 @@ public class Interpolator : MonoBehaviour
             float z;
             do
             {
-                x = Random.Range(-25, 25);
-                z = Random.Range(-25, 25);
+                x = Random.Range(-25.0f, 25.0f);
+                z = Random.Range(-25.0f, 25.0f);
             } while (Mathf.Abs(x) > 10 && Mathf.Abs(z) > 10);
             Vector3 pos = new Vector3(x, 1, z);
             for (int i = 0; i < 100; i++)
