@@ -12,6 +12,8 @@ public class CollisionCounter : MonoBehaviour
     [SerializeField]
     float graceTime;
     Spawners spawners;
+    [SerializeField]
+    bool showCollisions;
 
     // Start is called before the first frame update
     void Start()
@@ -33,8 +35,7 @@ public class CollisionCounter : MonoBehaviour
         if (collide.gameObject.tag == "Pedestrian" && collide.gameObject != parent && Time.time > startTime + graceTime && Time.time > collide.GetComponent<Pedestrian>().startTime + graceTime && StringLessThan(parent.name, collide.gameObject.name))
         {
             stats.Increment();
-            //Debug.Log("Me: " + startTime + "\nHim: " + collide.GetComponent<Pedestrian>().startTime + "\nTime: " + Time.time);
-            Debug.DrawLine(parent.transform.position, parent.transform.position + new Vector3(0, 10, 0), Color.red, 0.0f, true);
+            if(showCollisions) Debug.DrawLine(parent.transform.position, parent.transform.position + new Vector3(0, 10, 0), Color.red, 0.0f, true);
         }
         else if (collide.gameObject.tag == "Obstacle")
         {

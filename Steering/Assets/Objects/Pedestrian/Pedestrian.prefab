@@ -402,7 +402,7 @@ MonoBehaviour:
   target: 0
   origin: {x: 0, y: 0, z: 0}
   strat: 0
-  method: 0
+  method: 1
   startTime: 0
   distanceTraveled: 0
   mSpeed: 1.5
@@ -418,6 +418,7 @@ MonoBehaviour:
   frontThreat: {fileID: 0}
   sideThreat: {fileID: 0}
   avoidFrontCongestion: 0
+  showColliders: 2
 --- !u!54 &698056019062443756
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -577,6 +578,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   parent: {fileID: 4136248688860253084}
   graceTime: 2
+  showCollisions: 0
 --- !u!1 &8337011556261720642
 GameObject:
   m_ObjectHideFlags: 0

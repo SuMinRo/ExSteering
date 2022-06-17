@@ -512,3 +512,4 @@ MonoBehaviour:
   flatMoveKey: 304
   anchoredMoveKey: 325
   anchoredRotateKey: 324
+  rotateCamera: 1

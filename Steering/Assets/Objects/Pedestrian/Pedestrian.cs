@@ -52,6 +52,8 @@ public class Pedestrian : MonoBehaviour
     [HideInInspector]
     public bool avoidFrontCongestion;
     float maxRotationDeviationCos;
+    [SerializeField]
+    Show showColliders;
 
     // Start is called before the first frame update
     void Start()
@@ -72,7 +74,7 @@ public class Pedestrian : MonoBehaviour
                 maxRotationDeviationCos = Mathf.Cos(45.0f * Mathf.PI / 180.0f);
             else
                 maxRotationDeviationCos = Mathf.Cos(75.0f * Mathf.PI / 180.0f);
-            if (gameObject.name[7] != '0')
+            if (showColliders == Show.None || (showColliders == Show.Few && gameObject.name[7] != '0'))
             {
                 gameObject.transform.Find("FrontDetector").gameObject.GetComponent<Renderer>().enabled = false;
                 gameObject.transform.Find("SideDetector").gameObject.GetComponent<Renderer>().enabled = false;
@@ -203,7 +205,7 @@ public class Pedestrian : MonoBehaviour
             {
                 if (Physics.Raycast(transform.position, transform.TransformDirection(hit.dir * Vector3.forward), out hit.hit, 12, layerMask))
                 {
-                    if (gameObject.name[7] == '0')
+                    if (showColliders == Show.All || (showColliders == Show.Few && gameObject.name[7] == '0'))
                         Debug.DrawRay(transform.position, transform.TransformDirection(hit.dir * Vector3.forward) * hit.hit.distance, Color.red);
                     hit.Perception();
                     amountOfHits++;
@@ -212,7 +214,7 @@ public class Pedestrian : MonoBehaviour
                 }
                 else
                 {
-                    if (gameObject.name[7] == '0')
+                    if (showColliders == Show.All || (showColliders == Show.Few && gameObject.name[7] == '0'))
                         Debug.DrawRay(transform.position, transform.TransformDirection(hit.dir * Vector3.forward) * 12, Color.green);
                 }
             }
@@ -390,6 +392,13 @@ public enum SteeringAlgorithm
 {
     DevRules,
     Gradient
+}
+
+public enum Show
+{
+    All,
+    Few,
+    None
 }
 
 // For Gradient-use only.

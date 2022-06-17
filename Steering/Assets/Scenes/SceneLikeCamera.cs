@@ -42,6 +42,9 @@ public class SceneLikeCamera : MonoBehaviour
 
     [SerializeField] private KeyCode anchoredRotateKey = KeyCode.Mouse1;
 
+    [SerializeField]
+    bool rotateCamera;
+
     private void Start()
     {
         SavePosAndRot();
@@ -49,6 +52,10 @@ public class SceneLikeCamera : MonoBehaviour
 
     void Update()
     {
+        if (rotateCamera)
+        {
+            transform.RotateAround(Vector3.zero, Vector3.up, 5*Time.deltaTime);
+        }
         if (!doFocus)
             return;
 

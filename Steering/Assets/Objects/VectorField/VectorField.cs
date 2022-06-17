@@ -87,7 +87,7 @@ public class VectorField : MonoBehaviour
                 break;
         }
         //Debug.Log(vertices[0] + ", " + vertices[dims[1] - 1] + ", " + vertices[dims[1] * (dims[0] - 1)] + ", " + vertices[dims[0]*dims[1]-1]);
-        interpolator.StreamLines(this);
+        //interpolator.StreamLines(this);
     }
 
     // Update is called once per frame
