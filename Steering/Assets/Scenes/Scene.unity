@@ -132,7 +132,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: -5701324439450470162, guid: a980f9084dbf82c4d9812d7ddc2f1af0, type: 3}
       propertyPath: method
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -5701324439450470162, guid: a980f9084dbf82c4d9812d7ddc2f1af0, type: 3}
       propertyPath: maxTime
@@ -160,7 +160,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -5701324439450470162, guid: a980f9084dbf82c4d9812d7ddc2f1af0, type: 3}
       propertyPath: congestion
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -5701324439450470162, guid: a980f9084dbf82c4d9812d7ddc2f1af0, type: 3}
       propertyPath: minSigmas.x
@@ -512,4 +512,4 @@ MonoBehaviour:
   flatMoveKey: 304
   anchoredMoveKey: 325
   anchoredRotateKey: 324
-  rotateCamera: 1
+  rotateCamera: 0
